@@ -1,0 +1,415 @@
+$bg-color: (
+    default     : #ffffff,
+    primary     : #a1e3e5,
+    secondary   : #38a7be,
+    accent      : #be3838,
+    strong      : #fbf9fa,
+    warning     : #b58d46,
+    light       : #cadee3,
+    lighter     : #eff1f3,
+    weak        : #f2f4f9,
+    weaker      : #f5f7fa,
+    weakest     : #f9fafc,
+    heavy       : #0f647f
+);
+@function bg-color($name) {
+    @return map-get($bg-color, $name);
+}
+
+$text-color: (
+    default         : #000000,
+    primary         : #56636f,
+    secondary       : #858c96,
+    success         : #00a573,
+    accent          : #f48720,
+    strong          : #da2428,
+    warning         : #b58d46,
+    weak            : #9aaab9,
+    info            : #00a7be,
+    default_invert  : #ffffff
+);
+@function text-color($name) {
+    @return map-get($text-color, $name);
+}
+@each $status, $color in $text-color {
+    .u_color--#{$status} {
+        color: $color;
+    }
+}
+
+$border-color: (
+    default         : #e4e9ed,
+    primary         : #a1e3e5,
+    secondary       : #38a7be,
+    default_invert  : #ffffff
+);
+@function border-color($name) {
+    @return map-get($border-color, $name);
+}
+
+$shadow-color: (
+    default : rgba(0, 0, 0, 0.15),
+    dark    : rgba(0, 0, 0, 0.2),
+    light   : rgba(0, 0, 0, 0.075)
+);
+@function shadow-color($name) {
+    @return map-get($shadow-color, $name);
+}
+
+@mixin pseudo($display: block, $pos: absolute, $content: '') {
+    content: $content;
+    display: $display;
+    position: $pos;
+}
+
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+
+.el-table {
+    border-radius: border-radius(default);
+    color: text-color(primary);
+    font-size: font-size(mini);
+    transition: all 0.5s ease-in-out;
+
+    /*定義滾動條高寬及背景 高寬分別對應橫豎滾動條的尺寸*/
+    // *::-webkit-scrollbar {
+    //     background-color: transparent;
+    //     opacity: 0.3;
+    // }
+
+    /*定義滾動條軌道 內陰影+圓角*/
+    // *::-webkit-scrollbar-track {
+    //     background-color: transparent;
+    // }
+
+    /*定義滑塊 內陰影+圓角*/
+    *::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 8px;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+    }
+
+    .el-table__body-wrapper {
+        &::-webkit-scrollbar {
+            display: block;
+        }
+    }
+
+    /*定義滾動條高寬及背景 高寬分別對應橫豎滾動條的尺寸*/
+    *::-webkit-scrollbar {
+        opacity: 0.3;
+    }
+
+    /*定義滑塊 內陰影+圓角*/
+    *::-webkit-scrollbar-thumb {
+        background: rgba(112, 150, 160, 0.3);
+        border-radius: 8px;
+        border: 1px solid rgba(82, 255, 200, 0.3);
+
+        &:hover {
+            background: rgba(112, 150, 160, 0.6);
+        }
+    }
+
+    .el-table__body-wrapper {
+        &::-webkit-scrollbar {
+            display: block;
+        }
+    }
+
+    & .cell {
+        line-height: 24px;
+        word-break: initial;
+    }
+
+    & thead {
+        color: text-color(default);
+        font-weight: bold;
+    }
+
+    & th {
+        background: linear-gradient(0deg, rgba(bg-color(light), 0.3) 0%, bg-color(default) 35%);
+        box-shadow: 0 1px 0 border-color(default) inset;
+    }
+
+    & .el-table__fixed-right-patch {
+        background: linear-gradient(0deg, rgba(bg-color(light), 0.1) 0%, bg-color(default) 35%);
+        border-radius: 0 border-radius(default) 0 0;
+        border-bottom-color: border-color(default);
+        box-shadow: 0 1px 0 border-color(default) inset;
+        top: 0;
+    }
+
+    & th.is-leaf,
+    & td {
+        border-bottom: 1px solid border-color(default);
+    }
+
+    & td.gutter,
+    & th.gutter {
+        border-bottom: 1px solid border-color(default);
+    }
+
+    & th {
+        padding: 8px 0;
+    }
+
+    & td {
+        padding: 3px 0;
+    }
+
+    //
+    & .is-sortable {
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: text-color(info);
+        }
+    }
+
+    & .caret-wrapper {
+        height: 22px;
+    }
+
+    & .sort-caret {
+        border: solid 6px transparent;
+        left: 6px;
+        transition: border-color 0.2s ease;
+
+        &.ascending {
+            border-bottom-color: border-color(default);
+            top: -3px;
+        }
+
+        &.descending {
+            border-top-color: border-color(default);
+            bottom: -1px;
+        }
+    }
+
+    & .ascending {
+        & .sort-caret {
+            &.ascending {
+                border-bottom-color: border-color(secondary);
+            }
+        }
+    }
+
+    & .descending {
+        & .sort-caret {
+            &.descending {
+                border-top-color: border-color(secondary);
+            }
+        }
+    }
+
+    &::after {
+        @include pseudo;
+        @include size(1px, 100%);
+
+        border-radius: 0 border-radius(default) border-radius(default) 0;
+        border-right: 1px solid border-color(default);
+        background-color: transparent;
+        top: 0;
+        right: 0;
+        z-index: 10;
+    }
+
+    p.el-table-bet-result {
+        white-space: normal;
+        word-break: break-all;
+    }
+}
+
+.el-table--small {
+    & .cell {
+        line-height: 22px;
+    }
+}
+
+.el-table--group::after,
+.el-table--border::after {
+    border-radius: 0 border-radius(default) border-radius(default) 0;
+    border-right: 1px solid border-color(default);
+}
+
+.el-table::before {
+    border-radius: 0 0 border-radius(default) border-radius(default);
+    background-color: border-color(default);
+}
+
+.el-table--border {
+    border-top: none;
+    border-left-color: border-color(default);
+}
+
+.el-table--border td,
+.el-table--border th,
+.el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
+    border-right-color: border-color(default);
+}
+
+//
+.el-table--striped {
+    border-left: 1px solid border-color(default);
+
+    & .el-table__body tr.el-table__row--striped td {
+        background: bg-color(weakest);
+    }
+}
+
+//
+.el-table__empty-block {
+    border-bottom: 1px solid border-color(default);
+    width: auto !important;
+}
+
+.el-table__empty-text {
+    color: text-color(weak);
+}
+
+//
+.el-table__footer-wrapper {
+    & td {
+        border-top-color: border-color(default);
+    }
+
+    & tbody td {
+        background-color: bg-color(primary);
+        transition: background-color .25s ease;
+    }
+}
+
+.el-customize {
+    .el-table__footer-wrapper {
+        & td {
+            border-top-color: rgb(209, 209, 209);
+        }
+
+        & tbody td {
+            background-color: rgb(238, 238, 238);
+            transition: background-color .25s ease;
+            color: rgb(119, 119, 119);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    }
+
+    .el-table__footer-wrapper tbody tr:hover > td {
+        background-color: rgb(247, 247, 247);
+        color: rgb(160, 160, 160);
+    }
+}
+
+//
+.el-table--enable-row-hover .el-table__body tr:hover > td,
+.el-table__footer-wrapper tbody tr:hover > td,
+.el-table__body tr.hover-row.current-row > td,
+.el-table__body tr.hover-row.el-table__row--striped.current-row > td,
+.el-table__body tr.hover-row.el-table__row--striped > td,
+.el-table__body tr.hover-row > td {
+    background-color: mix(bg-color(weakest), bg-color(heavy), 96%);
+    color: text-color(default);
+}
+
+.el-table--small .el-table__body tr:hover > td {
+    background-color: mix(bg-color(weakest), bg-color(heavy), 96%);
+    color: text-color(default);
+}
+
+.el-table--group .el-table__header {
+    background: linear-gradient(0deg, rgba(178, 178, 178, 0.25) 0%, rgba(255, 255, 255, 0) 25%);
+
+    & th {
+        padding: 5px 0;
+    }
+
+    & tr {
+        background-color: transparent;
+    }
+
+    & tr ~ tr th {
+        box-shadow: none;
+    }
+
+    & .cell {
+        line-height: 16px;
+    }
+}
+
+.el-table thead.is-group th {
+    background-color: transparent;
+}
+
+.el-table.custom thead.is-group th {
+    background: linear-gradient(#fff 75%, #f4f4f4);
+}
+
+.el-table--th-column,
+.el-table--th-column.el-table--striped {
+    & tr th:first-of-type,
+    & tr td:first-of-type {
+        background: linear-gradient(-90deg, rgba(178, 178, 178, 0.25) 0%, rgba(255, 255, 255, 0) 15%);
+        border-right: 1px solid border-color(default);
+    }
+}
+
+.el-table__expanded-cell[class*=cell] {
+    padding: 10px 50px 0;
+}
+
+.el-table__fixed,
+.el-table__fixed-right {
+    box-shadow: -5px 0 5px shadow_color(light);
+}
+
+.el-table--enable-row-transition .el-table__body td {
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.el-table-column--selection .cell {
+    padding-right: 10px;
+}
+
+.el-table--fit {
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.el-dialog .el-table {
+    font-size: font-size(mini);
+}
+
+.el-table.el-table--total {
+    & thead.is-group tr:first-of-type {
+        & th {
+            background: linear-gradient(0deg, lighten(mix(bg-color(lighter), bg-color(weak), 65%), 3%) 0%, bg-color(default) 10%);
+            border-right: none;
+            color: text-color(warning);
+        }
+
+        & .cell {
+            font-weight: bold;
+            line-height: 16px;
+        }
+    }
+
+    & .el-table__header th {
+        padding: 8px 0;
+    }
+
+    & .cell {
+        line-height: 24px;
+    }
+}
+
+.el-table {
+    p.caution {
+        color: #aaa;
+    }
+}
