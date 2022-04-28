@@ -3,7 +3,7 @@ import axios from "axios"
 export function request(config) {
   const service = axios.create({
     headers: config.headers,
-    baseURL: 'https://nocodenolife.net/fortes/',
+    baseURL: import.meta.env.VITE_BASE_API,
     timeout: 30000,
     transformRequest: [(data:any) => {
       let ec = getJwtData(data)

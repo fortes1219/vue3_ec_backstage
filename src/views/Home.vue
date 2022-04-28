@@ -15,6 +15,7 @@ import { request } from '@/service/request'
 import { storeToRefs } from 'pinia'
 */
 import { userModules } from '@/store/user'
+import { env } from 'process'
 
 export default defineComponent({
   name: 'HomeView',
@@ -29,7 +30,7 @@ export default defineComponent({
 
     const setToken = () => {
       userStore.setToken('SLKDJKLS')
-      console.log('### store user: ', userStore.userStatus)
+      console.log('### store user: ', userStore.userStatus, import.meta.env.VITE_BASE_API)
     }
 
     const getApi = () => {
