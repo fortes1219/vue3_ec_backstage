@@ -34,7 +34,11 @@ export default defineComponent({
     const getApi = async () => {
       const data = ''
       const res = await getOtp(data)
-      console.log('###res: ', res)
+      if (res.data.Code === 200) {
+        console.log('###res: ', res, res.data.Data.OTP)
+      } else {
+        alert('API ERROR!!')
+      }
     }
 
     return {
