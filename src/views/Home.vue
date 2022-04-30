@@ -11,7 +11,7 @@
 import { defineComponent } from 'vue'
 import { reactive } from 'vue'
 import { getOtp } from '@/service/api'
-// import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 /* 解構的話才需要用這個
 import { storeToRefs } from 'pinia'
 */
@@ -35,6 +35,10 @@ export default defineComponent({
       const data = ''
       const res = await getOtp(data)
       if (res.data.Code === 200) {
+        ElMessage({
+          message: 'API GET Success.',
+          type: 'success'
+        })
         console.log('###res: ', res, res.data.Data.OTP)
       } else {
         alert('API ERROR!!')
