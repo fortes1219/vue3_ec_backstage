@@ -5,14 +5,20 @@ export function request(config) {
     headers: config.headers,
     baseURL: import.meta.env.VITE_BASE_API,
     timeout: 30000,
+    // transformRequest: [
+    //   (data: any) => {
+    //     let ret = ''
+    //     const tempData = getJwtData(data)
+    //     for (const it in tempData) {
+    //       ret += encodeURIComponent(it) + '=' + encodeURIComponent(tempData[it]) + '&'
+    //     }
+    //     return ret
+    //   }
+    // ]
     transformRequest: [
-      (data: any) => {
-        let ret = ''
+      (data = config.params) => {
         const tempData = getJwtData(data)
-        for (const it in tempData) {
-          ret += encodeURIComponent(it) + '=' + encodeURIComponent(tempData[it]) + '&'
-        }
-        return ret
+        return tempData.data
       }
     ]
   })
@@ -25,7 +31,7 @@ export function request(config) {
         }
       }
     }
-    const jwt = encodeURIComponent(btoa(encodeURIComponent(JSON.stringify(data))))
+    const jwt = encodeURIComponent(btoa(encodeURIComponent(data)))
     return { data: jwt }
   }
 
