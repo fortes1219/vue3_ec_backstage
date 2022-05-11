@@ -17,17 +17,17 @@ export function request(config) {
     // ]
     transformRequest: [
       (data = config.params) => {
-        const tempData = getJwtData(data)
+        const tempData = getJwtData(JSON.stringify(data))
         return tempData.data
       }
     ]
   })
-  function getJwtData(data: any): any {
-    for (const objKey in data) {
-      if (data.hasOwn(objKey)) {
-        const val = data[objKey]
+  const getJwtData = (data: any) => {
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        const val = data[key]
         if (val === '' || val === undefined) {
-          delete data[objKey]
+          delete data[key]
         }
       }
     }
