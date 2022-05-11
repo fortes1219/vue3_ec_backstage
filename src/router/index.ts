@@ -1,6 +1,8 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw, useRouter } from 'vue-router'
 import NProgress from 'nprogress'
 
+NProgress.configure({ showSpinner: false })
+const $router = useRouter()
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -13,7 +15,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Home.vue'),
     redirect: '/home/dashboard',
     meta: {
-      auth: true
+      requiresAuth: true
     },
     children: [
       {
@@ -21,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'dashboard',
         component: () => import('../components/dashboard.vue'),
         meta: {
-          auth: true
+          requiresAuth: true
         }
       }
     ]
@@ -40,10 +42,11 @@ router.beforeEach((to, from, next) => {
     token: string
   }
   const userInfo: userInfo = JSON.parse(localStorage.getItem('userInfo') as any)
-  if (to.meta.auth) {
-    if (userInfo.token) {
+  if (to.meta.requiresAuth) {
+    if (userInfo && userInfo.token !== '') {
       next()
     } else {
+      // $router.push({ name: 'login' })
       next('/')
     }
   } else {
