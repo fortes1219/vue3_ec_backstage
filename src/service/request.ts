@@ -3,7 +3,7 @@ import axios from 'axios'
 export function request(config) {
   const service = axios.create({
     headers: config.headers,
-    baseURL: import.meta.env.VITE_BASE_API,
+    baseURL: '/api',
     timeout: 30000,
     // transformRequest: [
     //   (data: any) => {

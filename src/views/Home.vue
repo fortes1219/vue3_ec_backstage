@@ -11,7 +11,6 @@
 import { defineComponent } from 'vue'
 import { reactive } from 'vue'
 import { getOtp } from '@/service/api'
-import { ElMessage } from 'element-plus'
 /* 解構的話才需要用這個
 import { storeToRefs } from 'pinia'
 */
