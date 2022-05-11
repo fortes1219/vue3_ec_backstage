@@ -9,8 +9,10 @@ export const userModules = defineStore('user', {
   }),
   getters: {},
   actions: {
-    setToken(token) {
-      this.userStatus.token = token
+    setToken(obj) {
+      this.userStatus.username = obj.username
+      this.userStatus.token = obj.token
+      localStorage.setItem('userInfo', JSON.stringify({ username: obj.username, token: obj.token }))
     }
   }
 })

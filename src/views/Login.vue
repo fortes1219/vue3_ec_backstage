@@ -21,8 +21,9 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import { reactive, onMounted } from 'vue'
-import { getOtp } from '@/service/api'
+import { getOtp, userLogin } from '@/service/api'
 
 import { userModules } from '@/store/user'
 
@@ -42,6 +43,7 @@ export default defineComponent({
   components: {},
   setup() {
     const userStore = userModules()
+    const router = useRouter()
     const state: LoginForm = reactive({
       title: 'Admin Login',
       form: {
@@ -52,11 +54,6 @@ export default defineComponent({
       currentOtp: '',
       token: ''
     })
-
-    const setToken = () => {
-      userStore.setToken(state.token)
-      console.log('### store user: ', userStore.userStatus)
-    }
 
     const getOtpNumbers = async () => {
       const res = await getOtp('')
@@ -71,14 +68,29 @@ export default defineComponent({
       }
     }
 
-    const handleLogin = () => {}
+    const handleLogin = async () => {
+      const jwt: LoginForm['form'] = {
+        username: state.form.username,
+        password: state.form.password,
+        otp: state.form.otp
+      }
+      const res = await userLogin(jwt)
+      if (res.data.Code === 200) {
+        state.token = res.data.Data.Token
+        await userStore.setToken({
+          username: res.data.Data.Info.Account,
+          token: res.data.Data.Token
+        })
+        await router.push({ name: 'home' })
+      }
+    }
+
     const init = onMounted(async () => {
       await getOtpNumbers()
     })
 
     return {
       state,
-      setToken,
       getOtpNumbers,
       handleLogin,
       init

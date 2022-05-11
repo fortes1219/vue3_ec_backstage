@@ -1,6 +1,6 @@
 <template>
   <div class="row vertical grow">
-    <el-button type="primary" @click="getCurrentOverview"></el-button>
+    <el-button type="primary" @click="getCurrentOverview">Dashboard Test</el-button>
   </div>
 </template>
 
