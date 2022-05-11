@@ -1,8 +1,7 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw, useRouter } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import NProgress from 'nprogress'
 
 NProgress.configure({ showSpinner: false })
-const $router = useRouter()
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
