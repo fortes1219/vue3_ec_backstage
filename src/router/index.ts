@@ -40,12 +40,11 @@ router.beforeEach((to, from, next) => {
     username: string
     token: string
   }
-  const userInfo: userInfo = JSON.parse(localStorage.getItem('userInfo') as any)
+  const userInfo: userInfo = JSON.parse(localStorage.getItem('userInfo') as string)
   if (to.meta.requiresAuth) {
     if (userInfo && userInfo.token !== '') {
       next()
     } else {
-      // $router.push({ name: 'login' })
       next('/')
     }
   } else {
