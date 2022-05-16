@@ -7,10 +7,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Dashboard: typeof import('./src/components/dashboard.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElForm: typeof import('element-plus/es')['ElForm']
-    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElUpload: typeof import('element-plus/es')['ElUpload']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
