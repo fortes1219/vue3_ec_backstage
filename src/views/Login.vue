@@ -27,7 +27,7 @@ import { getOtp, userLogin } from '@/service/api'
 
 import { userModules } from '@/store/user'
 
-interface LoginForm {
+type LoginForm = {
   title: string
   form: {
     username: string
