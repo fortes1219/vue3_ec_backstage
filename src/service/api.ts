@@ -25,7 +25,7 @@ export const getOverview = (params) =>
   request({
     url: '/admin/dashboard',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 'Content-Type': 'text/plain', token: token },
     params
   })
 
@@ -35,7 +35,8 @@ export const getImg = (params) =>
     url: '/admin/image/r',
     method: 'post',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      token: token
     },
     params
   })
