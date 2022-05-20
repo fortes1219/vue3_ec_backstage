@@ -1,5 +1,7 @@
 import { request } from '@/service/request'
 
+const token = JSON.parse(localStorage.getItem('userInfo') as string).token
+
 /* 取得登入OTP碼 */
 export const getOtp = (params) =>
   request({
@@ -23,6 +25,18 @@ export const getOverview = (params) =>
   request({
     url: '/admin/dashboard',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 'Content-Type': 'text/plain', token: token },
+    params
+  })
+
+/* get img */
+export const getImg = (params) =>
+  request({
+    url: '/admin/image/r',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      token: token
+    },
     params
   })

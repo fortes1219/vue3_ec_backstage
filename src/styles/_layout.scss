@@ -1,5 +1,5 @@
 html, body {
-    font-family: Arial, Helvetica, sans-serif, "微軟正黑體";
+    font-family: Arial, Helvetica, sans-serif, "微軟雅黑體";
     height: 100%;
 }
 
@@ -21,5 +21,37 @@ html, body {
         border-radius: 4px;
         background-color: #00E3E3;
         cursor: pointer;
+    }
+}
+
+.upload-customize {
+    @include flexBox(row, center, flex-start);
+    @include boxSizing;
+    position: relative;
+    width: 120px;
+    height: 34px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0 1rem;
+    cursor: pointer;
+    &::before {
+        content: "";
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        background: url(assets/img/icon-upload_2.svg) no-repeat center;
+        background-size: contain;
+    }
+    span {
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+    input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1px;
+        height: 1px;
     }
 }

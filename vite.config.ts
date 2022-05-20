@@ -6,6 +6,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import eslintPlugin from 'vite-plugin-eslint'
 import { visualizer } from 'rollup-plugin-visualizer'
 import viteCompression from 'vite-plugin-compression'
+import commonjsExternals from 'vite-plugin-commonjs-externals'
 import * as path from "path"
 
 const env = (mode: string, env: string) => loadEnv(mode, process.cwd())[env]
@@ -51,7 +52,7 @@ export default({mode}: ConfigEnv) => defineConfig({
     alias: {
       "@": path.resolve(__dirname, "src"),
       "assets": path.resolve(__dirname, "src/assets/"),
-      "img": path.resolve(__dirname, "src/img"),
+      "img": path.resolve(__dirname, "src/assets/img"),
       "styles": path.resolve(__dirname, "src/styles/"),
       "pages": path.resolve(__dirname, "src/pages/"),
     },
@@ -95,6 +96,7 @@ export default({mode}: ConfigEnv) => defineConfig({
         },
       }
     },
+    minify: "terser",
     terserOptions: {
       compress: {
           drop_console: true,
