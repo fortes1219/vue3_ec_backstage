@@ -10,7 +10,8 @@ $bg-color: (
     weak        : #f2f4f9,
     weaker      : #f5f7fa,
     weakest     : #f9fafc,
-    heavy       : #0f647f
+    heavy       : #0f647f,
+    login       : #F15A24,
 );
 @function bg-color($name) {
     @return map-get($bg-color, $name);

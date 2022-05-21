@@ -5,12 +5,12 @@ NProgress.configure({ showSpinner: false })
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'login',
+    name: 'Login',
     component: () => import('../views/Login.vue')
   },
   {
     path: '/home',
-    name: 'home',
+    name: 'Home',
     component: () => import('../views/Home.vue'),
     redirect: '/home/dashboard',
     meta: {
@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: 'dashboard',
-        name: 'dashboard',
+        name: 'Dashboard',
         component: () => import('../components/dashboard.vue'),
         meta: {
           requiresAuth: true

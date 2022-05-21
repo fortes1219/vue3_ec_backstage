@@ -15,4 +15,5 @@ elComponents.forEach((component: any) => {
 elPlugins.forEach((plugin) => {
   app.use(plugin)
 })
+
 app.mount('#app')

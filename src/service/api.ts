@@ -5,7 +5,7 @@ const token = JSON.parse(localStorage.getItem('userInfo') as string).token
 /* 取得登入OTP碼 */
 export const getOtp = (params) =>
   request({
-    url: '/member/otp',
+    url: '/admin/otp',
     method: 'get',
     headers: { 'Content-Type': 'text/plain' },
     params
@@ -14,7 +14,7 @@ export const getOtp = (params) =>
 /* 登入 */
 export const userLogin = (params) =>
   request({
-    url: '/member/login',
+    url: '/admin/login',
     method: 'post',
     headers: { 'Content-Type': 'text/plain' },
     params

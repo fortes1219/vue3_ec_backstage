@@ -2,11 +2,12 @@ import { ConfigEnv, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import eslintPlugin from 'vite-plugin-eslint'
 import { visualizer } from 'rollup-plugin-visualizer'
 import viteCompression from 'vite-plugin-compression'
-import commonjsExternals from 'vite-plugin-commonjs-externals'
 import * as path from "path"
 
 const env = (mode: string, env: string) => loadEnv(mode, process.cwd())[env]
@@ -29,6 +30,16 @@ export function configViteCompression() {
 }
 
 export default({mode}: ConfigEnv) => defineConfig({
+  base: "./",
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, 'src'),
+      "assets": path.resolve(__dirname, "src/assets/"),
+      "img": path.resolve(__dirname, "src/assets/img"),
+      "styles": path.resolve(__dirname, "src/styles/"),
+      "pages": path.resolve(__dirname, "src/pages/"),
+    },
+  },
   plugins: [
     vue(),
     visualizer({
@@ -37,26 +48,29 @@ export default({mode}: ConfigEnv) => defineConfig({
       template: "treemap"
     }),
     AutoImport({
-      resolvers: [ElementPlusResolver()],
+      imports: ['vue'],
+      resolvers: [
+        ElementPlusResolver()
+      ],
+      dts: path.resolve(path.resolve(__dirname, 'src'), 'auto-imports.d.ts'),
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        IconsResolver({
+          enabledCollections: ['ep']
+        }),
+        ElementPlusResolver(),
+      ],
+      dts: path.resolve(path.resolve(__dirname, 'src'), 'components.d.ts')
+    }),
+    Icons({
+      autoInstall: true
     }),
     eslintPlugin({
       cache: false
     }),
     viteCompression()
   ],
-  base: "./",
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-      "assets": path.resolve(__dirname, "src/assets/"),
-      "img": path.resolve(__dirname, "src/assets/img"),
-      "styles": path.resolve(__dirname, "src/styles/"),
-      "pages": path.resolve(__dirname, "src/pages/"),
-    },
-  },
   server: {
     port: 3000,
     proxy: {

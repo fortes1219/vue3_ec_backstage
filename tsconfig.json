@@ -16,7 +16,7 @@
     "strictNullChecks": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["vite/client", "webpack-env", "element-plus/global"],
+    "types": ["vite/client", "webpack-env", "element-plus/global", "unplugin-icons/types/vue"],
     "outDir": "./dist",
     "paths": {
       "@/*": ["src/*"],

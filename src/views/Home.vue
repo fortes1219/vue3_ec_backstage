@@ -1,7 +1,8 @@
 <template>
-  <div class="row horizontal grow">
-    <div class="row vertical grow">side</div>
-    <div class="row vertical grow">
+  <div class="home">
+    <Aside />
+    <div class="contents">
+      <Header />
       <router-view />
     </div>
   </div>
@@ -10,10 +11,12 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { reactive } from 'vue'
+import Aside from '@/components/aside.vue'
+import Header from '@/components/header.vue'
 
 export default defineComponent({
   name: 'Home',
-  components: {},
+  components: { Aside, Header },
   setup() {
     const state = reactive({
       title: 'HOME View'

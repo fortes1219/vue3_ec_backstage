@@ -1,0 +1,12 @@
+.header {
+    @include flexBox(row, center, space-between);
+    @include boxSizing;
+    padding: 0 1rem;
+    width: 100%;
+    height: 74px;
+    background: rgba(0,0,0,0.5);
+    .route-name {
+        font-size: 1.15rem;
+        color: #ccc;
+    }
+}
