@@ -21,4 +21,43 @@
             margin-right: 10px;
         }
     }
+    ul.menu {
+        @include flexBox(column, flex-start, flex-start);
+        width: 100%;
+        height: 100%;
+        li {
+            @include ease(0.3s);
+            @include flexBox(row, center, space-between);
+            @include boxSizing;
+            width: 100%;
+            height: 60px;
+            padding-left: 3rem;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            color: #999;
+            cursor: pointer;
+            svg {
+                margin-right: 10px;
+            }
+            &:after {
+                @include ease(0.3s);
+                content: "";
+                display: block;
+                width: 4px;
+                height: 0px;
+                background-color: bg-color(login);
+                opacity: 0;
+            }
+            &:hover {
+                @include ease(0.3s);
+                background: rgba(0,0,0,0.5);
+                color: text-color(light);
+                text-shadow: 0 0 5px text-color(light);
+                &:after {
+                    @include ease(0.3s);
+                    height: 60px;
+                    opacity: 1;
+                }
+            }
+        }
+    }
 }

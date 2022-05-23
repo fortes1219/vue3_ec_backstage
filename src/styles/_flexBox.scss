@@ -36,6 +36,10 @@
             @include flexBox(row, center, flex-start);
         }
 
+        &.v_center_end {
+            @include flexBox(row, center, flex-end);
+        }
+
         &.h_center {
             @include flexBox(row, flex-start, center);
         }

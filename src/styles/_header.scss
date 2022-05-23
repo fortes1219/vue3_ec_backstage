@@ -9,4 +9,37 @@
         font-size: 1.15rem;
         color: #ccc;
     }
+    .user-status {
+        @include flexBox(row, center, flex-start);
+        font-size: 1.2rem;
+        color: #ccc;
+        height: 100%;
+        svg {
+            margin-right: 10px;
+        }
+    }
+    .el-button.is-plain {
+        background-color: transparent;
+        &.logout {
+            color: lighten(text-color(logout), 5%);
+            border-color: lighten(text-color(logout), 5%);
+            &:hover {
+                color: text-color(light);
+                border-color: text-color(logout);
+                background-color: bg-color(logout);
+            }
+        }
+        &.action {
+            color: lighten(text-color(heavy), 5%);
+            border-color: lighten(text-color(heavy), 5%);
+            &:hover {
+                color: text-color(light);
+                border-color: text-color(heavy);
+                background-color: bg-color(heavy);
+            }
+        }
+        svg {
+            margin-right: 10px;
+        }
+    }
 }
