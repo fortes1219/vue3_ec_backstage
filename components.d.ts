@@ -7,7 +7,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Aside: typeof import('./src/components/aside.vue')['default']
     Dashboard: typeof import('./src/components/dashboard.vue')['default']
-    'Dashboard copy': typeof import('./src/components/dashboard copy.vue')['default']
+    AdminList: typeof import('./src/components/adminList.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElForm: typeof import('element-plus/es')['ElForm']
