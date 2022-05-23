@@ -63,7 +63,6 @@ export default defineComponent({
       const res = await getOtp('')
       if (res.data.Code === 200) {
         state.currentOtp = res.data.Data.OTP
-        console.log('###res: ', state.currentOtp)
       } else {
         ElMessage({
           message: `OTP API ERROR!! (${res.data.Code})`,
@@ -82,7 +81,8 @@ export default defineComponent({
       if (res.data.Code === 200) {
         state.token = res.data.Data.Token
         await userStore.setToken({
-          username: res.data.Data.Info.Account,
+          account: res.data.Data.Info.Account,
+          username: res.data.Data.Info.Name,
           token: res.data.Data.Token
         })
         await router.push({ name: 'Home' })
