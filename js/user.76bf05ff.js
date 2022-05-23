@@ -1,1 +1,0 @@
-import{b2 as t}from"./vendor.e6112f1a.js";const e=t("user",{state:()=>({userStatus:{account:"",username:"",token:""}}),getters:{},actions:{setToken(t){this.userStatus.account=t.account,this.userStatus.username=t.username,this.userStatus.token=t.token,localStorage.setItem("userInfo",JSON.stringify({account:t.account,username:t.username,token:t.token}))}}});export{e as u};
