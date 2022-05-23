@@ -12,6 +12,7 @@ $bg-color: (
     weakest     : #f9fafc,
     heavy       : #0f647f,
     login       : #F15A24,
+    logout      : #da2428
 );
 @function bg-color($name) {
     @return map-get($bg-color, $name);
@@ -27,6 +28,9 @@ $text-color: (
     warning         : #b58d46,
     weak            : #9aaab9,
     info            : #00a7be,
+    logout          : #da2428,
+    light           : #cadee3,
+    heavy           : #0f647f,
     default_invert  : #ffffff
 );
 @function text-color($name) {
