@@ -1,6 +1,6 @@
 import { request } from '@/service/request'
 
-const token = JSON.parse(localStorage.getItem('userInfo') as string).token
+const token = !localStorage.getItem('userInfo') ? '' : JSON.parse(localStorage.getItem('userInfo') as string).token
 
 /* 取得登入OTP碼 */
 export const getOtp = (params) =>

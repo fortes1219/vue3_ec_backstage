@@ -6,7 +6,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'Login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login.vue'),
+    meta: {
+      requiresAuth: false,
+      permissionId: ''
+    }
   },
   {
     path: '/home',
@@ -14,7 +18,8 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/Home.vue'),
     redirect: '/home/dashboard',
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      permissionId: ''
     },
     children: [
       {
@@ -22,7 +27,17 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Dashboard',
         component: () => import('../components/dashboard.vue'),
         meta: {
-          requiresAuth: true
+          requiresAuth: true,
+          permissionId: ''
+        }
+      },
+      {
+        path: 'admin_list',
+        name: 'AdminList',
+        component: () => import('../components/adminList.vue'),
+        meta: {
+          requiresAuth: true,
+          permissionId: ''
         }
       }
     ]

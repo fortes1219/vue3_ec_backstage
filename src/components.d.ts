@@ -4,8 +4,10 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminList: typeof import('./components/adminList.vue')['default']
     Aside: typeof import('./components/aside.vue')['default']
     Dashboard: typeof import('./components/dashboard.vue')['default']
+    'Dashboard copy': typeof import('./components/dashboard copy.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     Header: typeof import('./components/header.vue')['default']
     IEpAvatar: typeof import('~icons/ep/avatar')['default']
@@ -13,6 +15,7 @@ declare module 'vue' {
     IEpLock: typeof import('~icons/ep/lock')['default']
     IEpPiechart: typeof import('~icons/ep/piechart')['default']
     IEpPieChart: typeof import('~icons/ep/pie-chart')['default']
+    IEpTools: typeof import('~icons/ep/tools')['default']
     Upload_backup: typeof import('./components/upload_backup.vue')['default']
   }
 }
