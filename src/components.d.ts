@@ -7,9 +7,12 @@ declare module 'vue' {
     Aside: typeof import('./components/aside.vue')['default']
     Dashboard: typeof import('./components/dashboard.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     Header: typeof import('./components/header.vue')['default']
-    IEpEdit: typeof import('~icons/ep/edit')['default']
+    IEpAvatar: typeof import('~icons/ep/avatar')['default']
+    IEpKey: typeof import('~icons/ep/key')['default']
+    IEpLock: typeof import('~icons/ep/lock')['default']
+    IEpPiechart: typeof import('~icons/ep/piechart')['default']
+    IEpPieChart: typeof import('~icons/ep/pie-chart')['default']
     Upload_backup: typeof import('./components/upload_backup.vue')['default']
   }
 }
