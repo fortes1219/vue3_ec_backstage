@@ -96,17 +96,7 @@ export default({mode}: ConfigEnv) => defineConfig({
         chunkFileNames: "js/[name].[hash].js",
         entryFileNames: "js/[name].[hash].js",
         assetFileNames: (info) => {
-          let type = info.name.split(".")[1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(type)) {
-            type = "img";
-          } else if (/ttf|eot|woff|woff2/i.test(type)) {
-            type = "fonts"
-          } else if (/mp4|webm|ogg/i.test(type)) {
-            type = "video"
-          } else if (/mp3|wav/i.test(type)) {
-            type = "sound"
-          }
-          return `${type}/[name]-[hash].[ext]`;
+          return `[name]-[hash].[ext]`;
         },
       }
     },

@@ -17,7 +17,7 @@ html, body {
     @include flexBox(row, flex-start, flex-start);
     width: 100%;
     height: 100%;
-    background: url('img/body_bg.jpg') no-repeat;
+    background: url('/img/body_bg.jpg') no-repeat;
     background-size: cover;
     overflow: hidden;
     .contents {
@@ -45,7 +45,7 @@ html, body {
         width: 20px;
         height: 20px;
         margin-right: 10px;
-        background: url('img/icon-upload_2.svg') no-repeat center;
+        background: url('/img/icon-upload_2.svg') no-repeat center;
         background-size: contain;
     }
     span {
