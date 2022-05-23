@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import { elComponents, elPlugins } from '@/plugins/element-plus'
 import 'element-plus/theme-chalk/index.css'
-import 'styles/style.scss'
+import '/styles/style.scss'
 import { createPinia } from 'pinia'
 
 const app = createApp(App)

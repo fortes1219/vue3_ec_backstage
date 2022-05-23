@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { reactive } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useRouter, RouteRecordRaw } from 'vue-router'
 
 type asideState = {
