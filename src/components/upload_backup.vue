@@ -1,9 +1,9 @@
 <template>
-  <div class="row vertical grow" data-inset="1rem">
+  <div class="flx vertical grow" data-inset="1rem">
     <img :src="state.img" />
     <!-- <el-button type="primary" @click="getCurrentOverview">Dashboard Test</el-button>
     <br /> -->
-    <div class="row horizontal space_between" data-space-vertical="1rem">
+    <div class="flx horizontal space_between" data-space-vertical="1rem">
       <label class="upload-customize">
         <span>選擇圖片</span>
         <input type="file" @change="selectFile($event)" />

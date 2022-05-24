@@ -10,7 +10,7 @@ export const userModules = defineStore('user', {
   }),
   getters: {},
   actions: {
-    setToken(obj) {
+    setUserStatus(obj) {
       this.userStatus.account = obj.account
       this.userStatus.username = obj.username
       this.userStatus.token = obj.token
@@ -18,6 +18,14 @@ export const userModules = defineStore('user', {
         'userInfo',
         JSON.stringify({ account: obj.account, username: obj.username, token: obj.token })
       )
+    },
+    async logOut() {
+      this.userStatus = {
+        account: '',
+        username: '',
+        token: ''
+      }
+      await localStorage.removeItem('userInfo')
     }
   }
 })

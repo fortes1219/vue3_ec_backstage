@@ -1,8 +1,4 @@
 #login {
-    .input__inner {
-        @include flexBox(row, center, flex-start);
-        width: 100%;
-    }
     input[type="text"],
     input[type="password"] {
         @include boxSizing;
@@ -14,4 +10,13 @@
         border-radius: 6px;
         border: 1px solid #999;
     }
+}
+
+.input__inner {
+    @include flexBox(row, center, flex-start);
+    width: 100%;
+}
+
+.search-field {
+
 }

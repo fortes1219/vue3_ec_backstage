@@ -1,5 +1,5 @@
 <template>
-  <div class="flx vertical grow flex_1" data-inset="1rem">Admin List</div>
+  <div class="flx vertical grow flex_1" data-inset="1rem">Member</div>
 </template>
 
 <script lang="ts">
@@ -8,7 +8,7 @@ import { getOverview } from '@/service/api'
 import { ElMessage } from 'element-plus'
 
 export default defineComponent({
-  name: 'AdminList',
+  name: 'Member',
   setup() {
     const state = reactive({
       searchParams: {}

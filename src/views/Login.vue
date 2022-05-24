@@ -1,5 +1,5 @@
 <template>
-  <div id="login" class="row vertical grow center">
+  <div id="login" class="flx vertical grow center">
     <div class="login-block">
       <div class="login-block-form">
         <h1>Admin Backoffice</h1>
@@ -11,12 +11,12 @@
           <input v-model="state.form.password" type="password" placeholder="Password" />
         </div>
         <div class="input__inner" data-space-bottom="1rem">
-          <div class="row horizontal v_center">
+          <div class="flx horizontal v_center">
             <input v-model="state.form.otp" type="text" placeholder="OTP" />
             <div class="otp_number" @click="getOtpNumbers">{{ state.currentOtp }}</div>
           </div>
         </div>
-        <div class="row horizontal h_end">
+        <div class="flx horizontal h_end">
           <el-button class="btn__signin" @click="handleLogin">Login</el-button>
         </div>
       </div>
@@ -28,7 +28,7 @@ import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { reactive, onMounted } from 'vue'
 import { getOtp, userLogin } from '@/service/api'
-
+import { ElMessage } from 'element-plus'
 import { userModules } from '@/store/user'
 
 type LoginForm = {
@@ -80,12 +80,13 @@ export default defineComponent({
       const res = await userLogin(jwt)
       if (res.data.Code === 200) {
         state.token = res.data.Data.Token
-        await userStore.setToken({
+        await userStore.setUserStatus({
           account: res.data.Data.Info.Account,
           username: res.data.Data.Info.Name,
           token: res.data.Data.Token
         })
         await router.push({ name: 'Home' })
+        console.log(userStore.userStatus)
       }
     }
 

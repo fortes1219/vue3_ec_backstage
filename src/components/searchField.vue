@@ -1,15 +1,16 @@
 <template>
-  <div class="flx vertical grow flex_1" data-inset="1rem">Admin List</div>
+  <div class="search-field"></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, prop } from 'vue'
 import { getOverview } from '@/service/api'
 import { ElMessage } from 'element-plus'
 
 export default defineComponent({
-  name: 'AdminList',
-  setup() {
+  name: 'SearchField',
+  props: {},
+  setup(prop, ctx) {
     const state = reactive({
       searchParams: {}
     })

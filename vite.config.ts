@@ -2,8 +2,6 @@ import { ConfigEnv, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import eslintPlugin from 'vite-plugin-eslint'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -48,7 +46,6 @@ export default({mode}: ConfigEnv) => defineConfig({
       template: "treemap"
     }),
     AutoImport({
-      imports: ['vue'],
       resolvers: [
         ElementPlusResolver()
       ],
@@ -56,15 +53,9 @@ export default({mode}: ConfigEnv) => defineConfig({
     }),
     Components({
       resolvers: [
-        IconsResolver({
-          enabledCollections: ['ep']
-        }),
         ElementPlusResolver(),
       ],
       dts: path.resolve(path.resolve(__dirname, 'src'), 'components.d.ts')
-    }),
-    Icons({
-      autoInstall: true
     }),
     eslintPlugin({
       cache: false

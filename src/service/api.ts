@@ -40,3 +40,75 @@ export const getImg = (params) =>
     },
     params
   })
+
+/* Get goods list */
+export const getGoodsList = (params) =>
+  request({
+    url: '/admin/goods/r',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
+/* add goods */
+export const addGoods = (params) =>
+  request({
+    url: '/admin/goods/c',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
+/* update goods */
+export const updateGoods = (params) =>
+  request({
+    url: '/admin/goods/u',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
+/* remove goods */
+export const removeGoods = (params) =>
+  request({
+    url: '/admin/goods/d',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+/* Get goods type list */
+export const getGoodsType = (params) =>
+  request({
+    url: '/admin/goods/goodstype/r',
+    method: 'get',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+/* add goods type */
+export const addGoodsType = (params) =>
+  request({
+    url: '/admin/goods/goodstype/c',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+/* update goods type */
+export const updateGoodsType = (params) =>
+  request({
+    url: '/admin/goods/goodstype/u',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
+/* remove goods type */
+export const removeGoodsType = (params) =>
+  request({
+    url: '/admin/goods/goodstype/d',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
