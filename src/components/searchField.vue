@@ -1,20 +1,13 @@
 <template>
-  <div class="search-field"></div>
+  <div class="search-field"><slot /></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, prop } from 'vue'
-import { getOverview } from '@/service/api'
-import { ElMessage } from 'element-plus'
-
+import { defineComponent, reactive } from 'vue'
 export default defineComponent({
   name: 'SearchField',
-  props: {},
-  setup(prop, ctx) {
-    const state = reactive({
-      searchParams: {}
-    })
-
+  setup() {
+    const state = reactive({})
     return {
       state
     }

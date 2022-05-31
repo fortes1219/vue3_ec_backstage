@@ -1,6 +1,6 @@
 type importPath = (path: string) => void
 
-export type routesType = {
+type routesType = {
   path: string
   name: string
   component: importPath

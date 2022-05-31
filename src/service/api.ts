@@ -41,12 +41,24 @@ export const getImg = (params) =>
     params
   })
 
+/* get img */
+export const removeImg = (params) =>
+  request({
+    url: '/admin/image/d',
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      token: token
+    },
+    params
+  })
+
 /* Get goods list */
 export const getGoodsList = (params) =>
   request({
     url: '/admin/goods/r',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token: token },
     params
   })
 
@@ -55,7 +67,7 @@ export const addGoods = (params) =>
   request({
     url: '/admin/goods/c',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token: token },
     params
   })
 
@@ -64,7 +76,7 @@ export const updateGoods = (params) =>
   request({
     url: '/admin/goods/u',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token: token },
     params
   })
 
@@ -73,7 +85,7 @@ export const removeGoods = (params) =>
   request({
     url: '/admin/goods/d',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 'Content-Type': 'text/plain', token: token },
     params
   })
 
@@ -82,7 +94,7 @@ export const getGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/r',
     method: 'get',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 'Content-Type': 'text/plain', token: token },
     params
   })
 
@@ -91,7 +103,7 @@ export const addGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/c',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain' },
+    headers: { 'Content-Type': 'text/plain', token: token },
     params
   })
 
@@ -100,7 +112,7 @@ export const updateGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/u',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token: token },
     params
   })
 
@@ -109,6 +121,6 @@ export const removeGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/d',
     method: 'post',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', token: token },
     params
   })

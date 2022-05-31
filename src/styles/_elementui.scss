@@ -5,7 +5,7 @@ $bg-color: (
     accent      : #be3838,
     strong      : #fbf9fa,
     warning     : #b58d46,
-    light       : #cadee3,
+    light       : #ccc,
     lighter     : #eff1f3,
     weak        : #f2f4f9,
     weaker      : #f5f7fa,
@@ -13,7 +13,12 @@ $bg-color: (
     heavy       : #0f647f,
     login       : #F15A24,
     logout      : #da2428,
-    search      : #ED1C4B
+    search      : #ED1C4B,
+    reset       : #333,
+    dark        : #333,
+    deep_dark   : #1A1A1A,
+    confirm     : #F15A24,
+    remove      : #ED1C24
 );
 @function bg-color($name) {
     @return map-get($bg-color, $name);
@@ -129,171 +134,26 @@ $shadow-color: (
             display: block;
         }
     }
-
-    & .cell {
-        line-height: 24px;
-        word-break: initial;
-    }
-
-    & thead {
-        color: text-color(default);
-        font-weight: bold;
-    }
-
-    & th {
-        background: linear-gradient(0deg, rgba(bg-color(light), 0.3) 0%, bg-color(default) 35%);
-        box-shadow: 0 1px 0 border-color(default) inset;
-    }
-
-    & .el-table__fixed-right-patch {
-        background: linear-gradient(0deg, rgba(bg-color(light), 0.1) 0%, bg-color(default) 35%);
-        border-radius: 0 border-radius(default) 0 0;
-        border-bottom-color: border-color(default);
-        box-shadow: 0 1px 0 border-color(default) inset;
-        top: 0;
-    }
-
-    & th.is-leaf,
-    & td {
-        border-bottom: 1px solid border-color(default);
-    }
-
-    & td.gutter,
-    & th.gutter {
-        border-bottom: 1px solid border-color(default);
-    }
-
-    & th {
-        padding: 8px 0;
-    }
-
-    & td {
-        padding: 3px 0;
-    }
-
-    //
-    & .is-sortable {
-        transition: color 0.2s ease;
-
-        &:hover {
-            color: text-color(info);
-        }
-    }
-
-    & .caret-wrapper {
-        height: 22px;
-    }
-
-    & .sort-caret {
-        border: solid 6px transparent;
-        left: 6px;
-        transition: border-color 0.2s ease;
-
-        &.ascending {
-            border-bottom-color: border-color(default);
-            top: -3px;
-        }
-
-        &.descending {
-            border-top-color: border-color(default);
-            bottom: -1px;
-        }
-    }
-
-    & .ascending {
-        & .sort-caret {
-            &.ascending {
-                border-bottom-color: border-color(secondary);
-            }
-        }
-    }
-
-    & .descending {
-        & .sort-caret {
-            &.descending {
-                border-top-color: border-color(secondary);
-            }
-        }
-    }
-
-    &::after {
-        @include pseudo;
-        @include size(1px, 100%);
-
-        border-radius: 0 border-radius(default) border-radius(default) 0;
-        border-right: 1px solid border-color(default);
-        background-color: transparent;
-        top: 0;
-        right: 0;
-        z-index: 10;
-    }
-
-    p.el-table-bet-result {
-        white-space: normal;
-        word-break: break-all;
-    }
-}
-
-.el-table--small {
-    & .cell {
-        line-height: 22px;
-    }
-}
-
-.el-table--group::after,
-.el-table--border::after {
-    border-radius: 0 border-radius(default) border-radius(default) 0;
-    border-right: 1px solid border-color(default);
-}
-
-.el-table::before {
-    border-radius: 0 0 border-radius(default) border-radius(default);
-    background-color: border-color(default);
-}
-
-.el-table--border {
-    border-top: none;
-    border-left-color: border-color(default);
-}
-
-.el-table--border td,
-.el-table--border th,
-.el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
-    border-right-color: border-color(default);
-}
-
-//
-.el-table--striped {
-    border-left: 1px solid border-color(default);
-
-    & .el-table__body tr.el-table__row--striped td {
-        background: bg-color(weakest);
-    }
-}
-
-//
-.el-table__empty-block {
-    border-bottom: 1px solid border-color(default);
-    width: auto !important;
-}
-
-.el-table__empty-text {
-    color: text-color(weak);
-}
-
-//
-.el-table__footer-wrapper {
-    & td {
-        border-top-color: border-color(default);
-    }
-
-    & tbody td {
-        background-color: bg-color(primary);
-        transition: background-color .25s ease;
-    }
 }
 
 .el-customize {
+    .el-table {
+        background: rgba(0, 0, 0, 0.2);
+        tr, th.el-table__cell {
+            background-color: transparent;
+            border: none;
+            .is-leaf {
+                border-bottom: none !important;
+            }
+        }
+        .el-table__body {
+            color: text-color(light);
+
+            td.el-table__cell {
+                border: none;
+            }
+        }
+    }
     .el-table__footer-wrapper {
         & td {
             border-top-color: rgb(209, 209, 209);
@@ -307,117 +167,251 @@ $shadow-color: (
             font-weight: bold;
         }
     }
+    
+
+    .el-table__inner-wrapper::before {
+        border-color: transparent !important;
+        background-color: transparent !important;
+    }
 
     .el-table__footer-wrapper tbody tr:hover > td {
         background-color: rgb(247, 247, 247);
         color: rgb(160, 160, 160);
     }
-}
 
-//
-.el-table--enable-row-hover .el-table__body tr:hover > td,
-.el-table__footer-wrapper tbody tr:hover > td,
-.el-table__body tr.hover-row.current-row > td,
-.el-table__body tr.hover-row.el-table__row--striped.current-row > td,
-.el-table__body tr.hover-row.el-table__row--striped > td,
-.el-table__body tr.hover-row > td {
-    background-color: mix(bg-color(weakest), bg-color(heavy), 96%);
-    color: text-color(default);
-}
-
-.el-table--small .el-table__body tr:hover > td {
-    background-color: mix(bg-color(weakest), bg-color(heavy), 96%);
-    color: text-color(default);
-}
-
-.el-table--group .el-table__header {
-    background: linear-gradient(0deg, rgba(178, 178, 178, 0.25) 0%, rgba(255, 255, 255, 0) 25%);
-
-    & th {
-        padding: 5px 0;
-    }
-
-    & tr {
-        background-color: transparent;
-    }
-
-    & tr ~ tr th {
-        box-shadow: none;
-    }
-
-    & .cell {
-        line-height: 16px;
-    }
-}
-
-.el-table thead.is-group th {
-    background-color: transparent;
-}
-
-.el-table.custom thead.is-group th {
-    background: linear-gradient(#fff 75%, #f4f4f4);
-}
-
-.el-table--th-column,
-.el-table--th-column.el-table--striped {
-    & tr th:first-of-type,
-    & tr td:first-of-type {
-        background: linear-gradient(-90deg, rgba(178, 178, 178, 0.25) 0%, rgba(255, 255, 255, 0) 15%);
-        border-right: 1px solid border-color(default);
-    }
-}
-
-.el-table__expanded-cell[class*=cell] {
-    padding: 10px 50px 0;
-}
-
-.el-table__fixed,
-.el-table__fixed-right {
-    box-shadow: -5px 0 5px shadow_color(light);
-}
-
-.el-table--enable-row-transition .el-table__body td {
-    transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-.el-table-column--selection .cell {
-    padding-right: 10px;
-}
-
-.el-table--fit {
-    border-right: 0;
-    border-bottom: 0;
-}
-
-.el-dialog .el-table {
-    font-size: font-size(mini);
-}
-
-.el-table.el-table--total {
-    & thead.is-group tr:first-of-type {
-        & th {
-            background: linear-gradient(0deg, lighten(mix(bg-color(lighter), bg-color(weak), 65%), 3%) 0%, bg-color(default) 10%);
-            border-right: none;
-            color: text-color(warning);
+    .el-table--enable-row-hover .el-table__body tr{
+        &:nth-child(odd) {
+            background: rgba(242,242,242,0.1);
         }
-
-        & .cell {
-            font-weight: bold;
-            line-height: 16px;
+        &:nth-child(even) {
+            background: rgba(242,242,242,0.2);
         }
     }
 
-    & .el-table__header th {
-        padding: 8px 0;
-    }
-
-    & .cell {
-        line-height: 24px;
+    .el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell {
+        background: rgba(242,242,242,0.25);
     }
 }
 
-.el-table {
-    p.caution {
-        color: #aaa;
+@mixin elColor($color) {
+    .el-form-item__label {
+        color: $color;
     }
+
+    .el-range-separator {
+        color: $color;
+    }
+    
+    .el-date-editor .el-range-separator {
+        color: $color;
+    }
+
+    .el-date-editor .el-range-input {
+        color: $color;
+    }
+}
+
+@mixin elButton {
+    .el-button {
+        &.is-plain {
+            &.logout {
+                background-color: transparent;
+                color: lighten(text-color(logout), 5%);
+                border-color: lighten(text-color(logout), 5%);
+                &:hover {
+                    color: text-color(light);
+                    border-color: text-color(logout);
+                    background-color: bg-color(logout);
+                }
+            }
+            &.action {
+                background-color: transparent;
+                color: lighten(text-color(heavy), 5%);
+                border-color: lighten(text-color(heavy), 5%);
+                &:hover {
+                    color: text-color(light);
+                    border-color: text-color(heavy);
+                    background-color: bg-color(heavy);
+                }
+            }
+            &.cancel {
+                background: rgba(0, 0, 0, 0);
+                color: lighten(text-color(gray_light), 5%);
+                border-color: lighten(text-color(gray_light), 5%);
+                &:hover {
+                    color: text-color(gray_light);
+                    border-color: text-color(gray_light);
+                    background: rgba(0, 0, 0, 0.15);
+                }
+            }
+        }
+
+        &.reset {
+            border: none;
+            color: lighten(text-color(gray_light), 5%);
+            background-color: bg-color(reset);
+            &:hover {
+                color: text-color(gray_light);
+                background-color: lighten(bg-color(reset), 5%);
+            }
+        }
+        &.search {
+            border: none;
+            min-width: 100px;
+            color: lighten(text-color(gray_light), 5%);
+            background-color: bg-color(search);
+            &:hover {
+                color: text-color(gray_light);
+                background-color: lighten(bg-color(search), 5%);
+            }
+        }
+        &.dark {
+            border: none;
+            color: lighten(text-color(gray_light), 5%);
+            background-color: bg-color(dark);
+            border-radius: 60px;
+            &:hover {
+                color: text-color(gray_light);
+                background-color: lighten(bg-color(dark), 5%);
+            }
+        }
+        &.deep_dark {
+            border: none;
+            color: lighten(text-color(gray_light), 5%);
+            background-color: bg-color(deep_dark);
+            border-radius: 60px;
+            &:hover {
+                color: text-color(gray_light);
+                background-color: lighten(bg-color(deep_dark), 5%);
+            }
+        }
+        &.remove {
+            border: none;
+            color: lighten(text-color(gray_light), 5%);
+            background-color: bg-color(remove);
+            border-radius: 60px;
+            &:hover {
+                color: text-color(gray_light);
+                background-color: lighten(bg-color(remove), 5%);
+            }
+        }
+        &.confirm {
+            border: none;
+            color: lighten(text-color(gray_light), 5%);
+            background-color: bg-color(confirm);
+            &:hover {
+                color: text-color(gray_light);
+                background-color: lighten(bg-color(confirm), 5%);
+            }
+        }
+    }
+}
+
+@mixin elInput {
+    .el-input {
+        border-color: #4d4d4d;
+        color: #ccc;
+    }
+    .el-input__wrapper {
+        background-color: rgba(0,0,0,0.3);
+        box-shadow: 0 0 0 1px #4d4d4d inset !important;
+        color: #ccc;
+    }
+    .el-input__inner {
+        color: #ccc;
+    }
+    .el-select {
+        .el-input {
+            &.is-focus {
+                .el-input__wrapper {
+                    box-shadow: 0 0 0 1px #ccc inset !important;
+                }
+            }
+        }
+    }
+}
+
+@mixin elForm {
+    .el-form-item {
+        margin-bottom: 0;
+    }
+}
+
+.el-select-dropdown__item {
+    &.hover,
+    &:hover {
+        background-color: lighten(#333, 5%) !important;
+        color: #ccc !important;
+    }
+    background-color: #333 !important;
+}
+
+.el-popper {
+    &.is-pure.is-light.el-select__popper {
+        background-color: #333;
+        color: #ccc;
+        border-color: #4d4d4d;
+        .el-popper__arrow {
+            &::before {
+                background-color: #333;
+                border-color: #4d4d4d;
+            }
+        }
+    }
+}
+
+.el-pagination.is-background {
+    .btn-prev,
+    .btn-next {
+        color: #ccc !important;
+        background: rgba(240, 242, 245 ,0.3) !important;
+    }
+    ul.el-pager {
+        li {
+            &.is-active {
+                background-color: #ED1C24 !important;
+            }
+            &.number {
+                color: #ccc !important;
+                background: rgba(240, 242, 245 ,0.3);
+                &:hover {
+                    background: rgba(240, 242, 245 ,0.4);
+                }
+            }
+        }
+        
+    }
+}
+
+.el-dialog {
+    background-color: #333 !important;
+    .el-dialog__header {
+        box-sizing: border-box;
+        padding: 1rem;
+        margin: 0;
+    }
+    
+    .el-dialog__title {
+        color: #ccc;
+    }
+    .el-dialog__body {
+        padding: 0 1rem;
+        color: #999;
+        hr {
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+::placeholder,
+::-webkit-input-placeholder {
+    color: #666 !important;
+    opacity: 1;
+}
+
+.el-customize {
+    @include elButton;
+    @include elColor(#999);
+    @include elInput;
+    @include elForm;
 }

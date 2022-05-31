@@ -23,7 +23,7 @@ html, body {
     .contents {
         @include flexBox(column, flex-start, flex-start);
         width: 100%;
-        min-width: 1200px;
+        min-width: 1000px;
         height: 100%;
         overflow-y: auto;
         background: rgba(58, 0, 0, 0.6);
@@ -65,63 +65,4 @@ html, body {
 h2.title {
     font-size: 2rem;
     color: text-color(gray_light)
-}
-
-@mixin elColor($color) {
-    .el-form-item__label {
-        color: $color;
-    }
-
-    .el-range-separator {
-        color: $color;
-    }
-    
-    .el-date-editor .el-range-separator {
-        color: $color;
-    }
-
-    .el-date-editor .el-range-input {
-        color: $color;
-    }
-}
-
-@mixin elButton {
-    .el-button {
-        &.is-plain {
-            &.logout {
-                background-color: transparent;
-                color: lighten(text-color(logout), 5%);
-                border-color: lighten(text-color(logout), 5%);
-                &:hover {
-                    color: text-color(light);
-                    border-color: text-color(logout);
-                    background-color: bg-color(logout);
-                }
-            }
-            &.action {
-                background-color: transparent;
-                color: lighten(text-color(heavy), 5%);
-                border-color: lighten(text-color(heavy), 5%);
-                &:hover {
-                    color: text-color(light);
-                    border-color: text-color(heavy);
-                    background-color: bg-color(heavy);
-                }
-            }
-        }
-        &.search {
-            border: none;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(search);
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(search), 5%);
-            }
-        }
-    }
-}
-
-.el-customize {
-    @include elButton;
-    @include elColor(#999);
 }

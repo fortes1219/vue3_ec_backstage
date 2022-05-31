@@ -1,10 +1,10 @@
-export type userInfoType = {
+type userInfoType = {
   account: string
   username: string
   token: string
 }
 
-export type userApi = {
+type userApi = {
   Code: number
   Data: {
     Info: {

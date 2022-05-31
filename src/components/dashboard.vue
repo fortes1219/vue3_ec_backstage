@@ -43,10 +43,8 @@ export default defineComponent({
 
     const getCurrentOverview = async () => {
       const jwt = {
-        After: date.value[0],
-        Berfo: date.value[1]
-        // After: 0,
-        // Berfo: 1
+        After: new Date(date.value[0]).getTime(),
+        Berfo: new Date(date.value[1]).getTime()
       }
       const res = await getOverview(jwt)
       if (res.data.Code === 200) {
