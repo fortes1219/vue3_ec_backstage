@@ -1,5 +1,6 @@
 @for $i from 0 through 4 {
     [data-inset="#{$i * 0.5}rem"] {
+        @include boxSizing;
         padding: $i * 0.5rem;
     }
 }

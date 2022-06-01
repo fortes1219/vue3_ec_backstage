@@ -3,7 +3,7 @@ import axios from 'axios'
 export function request(config) {
   const service = axios.create({
     headers: config.headers,
-    baseURL: '/api',
+    baseURL: import.meta.env.MODE === 'production' ? 'https://nocodenolife.net/fortes/' : '/api',
     timeout: 30000,
     // transformRequest: [
     //   (data: any) => {
