@@ -15,7 +15,6 @@ export const goodsModules = defineStore('goods', {
       const res = await getGoodsType({})
       if (res.data.Code === 200) {
         this.typeList = res.data.Data
-        this.typeList.unshift({ ID: 0, Name: '全部', Alias: '' })
         console.log('###goods store: ', this.typeList)
       } else {
         ElMessage({

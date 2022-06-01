@@ -75,5 +75,25 @@
             grid-gap: #{$i}px;
         }
     }
-    
+    @for $i from 0 through 120 {
+        &.auto-col-#{$i * 5} {
+            @include grid-auto-colums(minmax(#{$i * 5px}, auto))
+        }
+
+        &.auto-rows-#{$i * 5} {
+            @include grid-auto-rows(minmax(#{$i * 5px}, auto))
+        }
+    }
+}
+
+@for $i from 0 through 10 {
+    @for $j from 0 through 10 {
+        .row-#{$i}-#{$j} {
+            @include grid-row($i, $j)
+        }
+
+        .col-#{$i}-#{$j} {
+            @include grid-col($i, $j)
+        }
+    }
 }

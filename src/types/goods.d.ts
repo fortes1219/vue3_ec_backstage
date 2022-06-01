@@ -7,16 +7,20 @@ type goodsStateType = {
   }
   tableData: any[]
   typeList: { ID: number; Name: string; Alias?: string }[]
+  editMode: 'add' | 'edit'
 }
 
 type goodsFormType = {
-  show: boolean
-  duration: Date
-  goodsType: number
-  goodsName: string
-  price: number | string
-  imagesident: string
-  description: string
+  ID?: number | null
+  Show: boolean
+  Duration?: Date
+  GoodsTypeID: number | undefined
+  Name: string
+  SpecsAllowance: number
+  GoodsSpecs: { Specs: string }[]
+  UnitPrice: number | string
+  ImagesIdent: string
+  Description: string
 }
 
 type goodsDialogType = {

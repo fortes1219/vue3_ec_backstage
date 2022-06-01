@@ -13,8 +13,12 @@ declare module 'vue' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElRadio: typeof import('element-plus/es')['ElRadio']
+    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
+    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
@@ -24,6 +28,7 @@ declare module 'vue' {
     Member: typeof import('./components/member.vue')['default']
     Order: typeof import('./components/order.vue')['default']
     SearchField: typeof import('./components/searchField.vue')['default']
+    SpecTags: typeof import('./components/specTags.vue')['default']
     Upload_backup: typeof import('./components/upload_backup.vue')['default']
   }
 }

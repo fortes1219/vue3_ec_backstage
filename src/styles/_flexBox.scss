@@ -35,6 +35,12 @@
     }
 }
 
+@for $i from 0 through 100 {
+    .w-#{$i * 5px} {
+        width: $i * 5px;
+    }
+}
+
 .flx {
     @include boxSizing;
     position: relative;

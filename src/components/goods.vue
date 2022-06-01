@@ -6,7 +6,7 @@
           <div class="flx horizontal v_center">
             <el-form-item label="商品分類:">
               <el-select v-model="state.searchParams.goodsTypeSelected">
-                <el-option v-for="(item, i) in goodsTypeList" :key="i" :label="item.Name" :value="item.ID" />
+                <el-option v-for="(item, i) in goodsTypeList.mix" :key="i" :label="item.Name" :value="item.ID" />
               </el-select>
             </el-form-item>
             <el-form-item label="商品名稱:">
@@ -70,15 +70,24 @@
               >
                 編輯商品
               </el-button>
-              <el-button type="primary" size="small" round class="remove" icon="Delete" @click="removeGoods(scope.row)"
-                >刪除</el-button
+              <el-button
+                type="primary"
+                size="small"
+                round
+                class="remove"
+                icon="Delete"
+                @click="handleRemoveGoods(scope.row)"
               >
+                刪除
+              </el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </div>
   </div>
+
+  <!--分類管理-->
   <el-dialog v-model="dialogGoodsType" width="570px" title="分類管理">
     <hr />
     <div class="flx horizontal v_center" data-space-bottom="1rem">
@@ -88,7 +97,7 @@
       <el-button type="primary" class="deep_dark" icon="CirclePlus" @click="addNewGoodsType">新增</el-button>
     </div>
     <el-table
-      :data="goodsTypeList"
+      :data="goodsTypeList.origin"
       height="300px"
       style="width: 100%"
       :default-sort="{ prop: 'ID', order: 'descending' }"
@@ -123,16 +132,82 @@
     </el-table>
     <template #footer>
       <span class="dialog-footer">
-        <el-button plain class="cancel" @click="dialogGoods = false">Cancel</el-button>
+        <el-button plain class="cancel" @click="dialogGoodsType = false">Cancel</el-button>
         <el-button type="primary" class="confirm" @click="handleUpdateGoodsType">Confirm</el-button>
       </span>
     </template>
   </el-dialog>
-  <el-dialog v-model="dialogGoods" title="商品管理">
+
+  <!--商品管理-->
+  <el-dialog
+    v-model="dialogGoods"
+    width="600px"
+    :close-on-click-modal="false"
+    :title="detectGoodsDialogMode"
+    @close="resetGoodsForm(goodsFormRef)"
+  >
+    <hr />
+    <el-form ref="goodsFormRef" :model="goodsForm" label-width="80px">
+      <el-form-item label="前台顯示:" prop="Show">
+        <el-radio-group v-model="goodsForm.Show" size="small">
+          <el-radio-button :label="true">是</el-radio-button>
+          <el-radio-button :label="false">否</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <!-- <el-form-item label="新品期間:"></el-form-item> -->
+      <el-form-item label="分類:" prop="GoodsTypeID">
+        <el-select v-model="goodsForm.GoodsTypeID">
+          <el-option v-for="(item, i) in goodsTypeList.origin" :key="i" :label="item.Name" :value="item.ID" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="名稱:" prop="Name">
+        <div class="w-200px">
+          <el-input v-model="goodsForm.Name" type="text" class="col-1-4" placeholder="商品名稱" />
+        </div>
+      </el-form-item>
+      <el-form-item label="商品規格:" prop="SpecsAllowance">
+        <div class="flx horizontal v_center">
+          <span class="sp_right">可選</span>
+          <div class="w-50px sp_right">
+            <el-input v-model="goodsForm.SpecsAllowance" type="text" />
+          </div>
+          <span class="sp_right">種</span>
+          <el-button type="primary" round class="deep_dark" icon="CirclePlus" @click="addGoodsSpecs">
+            新增規格
+          </el-button>
+        </div>
+        <div class="flx horizontal wrap" data-space-vertical="1rem">
+          <span v-for="(item, i) in goodsForm.GoodsSpecs" :key="i" class="spec_tag">
+            <el-icon @click="removeGoodsSpecs(item, i)">
+              <Close />
+            </el-icon>
+            <span>{{ item.Specs }}</span>
+            <input v-model="item.Specs" type="text" placeholder="商品規格" @input="spacTagChange(i)" />
+          </span>
+        </div>
+      </el-form-item>
+      <el-form-item label="金額:" prop="UnitPrice">
+        <div class="w-80px">
+          <el-input v-model="goodsForm.UnitPrice" type="text" class="col-1-3" placeholder="商品單價" />
+        </div>
+      </el-form-item>
+      <el-form-item label="圖片上傳:" prop="ImagesIdent"></el-form-item>
+      <el-form-item label="商品說明:" prop="Description">
+        <el-input
+          v-model="goodsForm.Description"
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 5 }"
+          placeholder="商品說明"
+        />
+      </el-form-item>
+    </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button plain class="cancel" @click="dialogGoods = false">Cancel</el-button>
-        <el-button type="primary" class="confirm" @click="dialogGoods = false">Confirm</el-button>
+        <el-button v-if="state.editMode !== 'edit'" plain class="cancel" @click="resetGoodsForm(goodsFormRef)">
+          Reset
+        </el-button>
+        <el-button type="primary" class="confirm" @click="handleUpdateGoods">Confirm</el-button>
       </span>
     </template>
   </el-dialog>
@@ -147,13 +222,14 @@ import {
   // addGoods,
   addGoodsType,
   getGoodsList,
-  // updateGoods,
+  updateGoods,
   // updateGoodsType,
-  // removeGoods,
+  removeGoods,
   removeGoodsType,
   updateGoodsType
 } from '@/service/api'
 import SearchField from '@/components/SearchField.vue'
+import type { FormInstance } from 'element-plus'
 
 // type goodsTypeArray = Ref<{ ID: number; Name: string }[]>
 
@@ -164,6 +240,7 @@ export default defineComponent({
   },
   setup() {
     const goodsStore = goodsModules()
+    const goodsFormRef = ref<FormInstance>()
     const state: goodsStateType = reactive({
       searchParams: {
         goodsTypeSelected: 0,
@@ -172,11 +249,24 @@ export default defineComponent({
         pageSize: 20
       },
       tableData: [],
-      typeList: []
+      typeList: [],
+      editMode: 'add'
+    })
+    const goodsForm: goodsFormType = reactive({
+      ID: null,
+      Show: true,
+      GoodsTypeID: 1,
+      Name: '',
+      SpecsAllowance: 0,
+      GoodsSpecs: [],
+      UnitPrice: 0,
+      ImagesIdent: '',
+      Description: ''
     })
     const dialogGoods = ref(false)
     const dialogGoodsType = ref(false)
     const newTypeName = ref('')
+    const newSpecName = ref('')
 
     let oldParams = { ...state.searchParams }
 
@@ -184,7 +274,16 @@ export default defineComponent({
       goodsStore.getAllGoodsType()
     }
 
-    const goodsTypeList = computed((): { ID: number; Name: string }[] => goodsStore.typeList)
+    const goodsTypeList = computed(
+      (): { origin: { ID: number; Name: string }[]; mix: { ID: number; Name: string }[] } => {
+        const arr = JSON.parse(JSON.stringify(goodsStore.typeList))
+        arr.unshift({ ID: 0, Name: '全部', Alias: '' })
+        return {
+          origin: JSON.parse(JSON.stringify(goodsStore.typeList)),
+          mix: arr
+        }
+      }
+    )
 
     const handleSearch = (useNewParams = true, pageChange = true) => {
       const params = useNewParams ? state.searchParams : oldParams
@@ -204,6 +303,8 @@ export default defineComponent({
       })
     }
 
+    /* Pagination Events */
+
     const onPageChange = (val: number) => {
       state.searchParams.currentPage = val
       handleSearch(false, true)
@@ -215,17 +316,50 @@ export default defineComponent({
       handleSearch(false, true)
     }
 
+    /* Goods Management */
+
     const openGoodsDialog = (mode: string, obj?) => {
       const caseObj = {
-        add: () => {},
+        add: () => {
+          state.editMode = 'add'
+        },
         edit: () => {
-          console.log('edit')
+          state.editMode = 'edit'
+          const data = { ...obj }
+          Object.keys(goodsForm).forEach((el) => {
+            goodsForm[el] = data[el]
+          })
+          goodsForm.GoodsSpecs = goodsForm.GoodsSpecs.filter((el) => el.Specs !== '')
+          console.log({ ...obj })
         }
       }
       caseObj[mode]()
       dialogGoods.value = true
       console.log(dialogGoods.value)
     }
+
+    const handleUpdateGoods = () => {
+      callApi(updateGoods, { ...goodsForm }, () => {
+        ElMessage({
+          type: 'success',
+          message: '已成功更新商品內容!'
+        })
+      })
+    }
+
+    const detectGoodsDialogMode = computed(() => {
+      let result = ''
+      const caseObj = {
+        add: () => {
+          result = '新增商品'
+        },
+        edit: () => {
+          result = '編輯商品'
+        }
+      }
+      caseObj[state.editMode]()
+      return result
+    })
 
     const getGoodsImg = (isList = true, ident?: string) => {
       let imgPath = ''
@@ -235,35 +369,59 @@ export default defineComponent({
       return imgPath
     }
 
-    const editGoods = (obj) => {
-      console.log(obj)
-      dialogGoods.value = true
+    const handleRemoveGoods = (obj) => {
+      const title = '提示訊息'
+      const msg = `確定要刪除${obj.Name}(ID: ${obj.ID})?`
+      const data = { ...obj }
+      ElMessageBox.confirm(msg, title, {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
+        .then(() => {
+          callApi(removeGoods, { ID: data.ID }, async () => {
+            await handleSearch(false, false)
+            ElMessage({
+              type: 'success',
+              message: '已成功刪除商品!'
+            })
+          })
+          console.log('###remove goods: ', data.ID)
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '已取消'
+          })
+        })
     }
 
-    const removeGoods = (obj) => {
-      console.log('###remove goods: ', obj)
-    }
+    /* Goods Type Managemaent */
 
     const openGoodsType = () => {
-      state.typeList = goodsTypeList.value
+      state.typeList = goodsTypeList.value.origin
       dialogGoodsType.value = true
     }
 
     const addNewGoodsType = () => {
       callApi(addGoodsType, { Name: newTypeName.value }, async () => {
         await getGoodsTypeList()
-        state.typeList = goodsTypeList.value
+        state.typeList = goodsTypeList.value.origin
       })
     }
 
     const handleUpdateGoodsType = () => {
-      const arr = goodsTypeList.value.filter((el) => el.ID > 1)
+      const arr = goodsTypeList.value.origin.filter((el) => el.ID > 1)
       const jwt = JSON.parse(JSON.stringify(arr))
       console.log(jwt)
       callApi(updateGoodsType, { List: jwt }, async (res) => {
         await getGoodsTypeList()
+        ElMessage({
+          type: 'success',
+          message: '已成功更新商品分類!'
+        })
         console.log(res)
-        state.typeList = goodsTypeList.value
+        state.typeList = goodsTypeList.value.origin
       })
     }
 
@@ -293,6 +451,34 @@ export default defineComponent({
         })
     }
 
+    const addGoodsSpecs = () => {
+      goodsForm.GoodsSpecs.push({ Specs: '' })
+      console.log(goodsForm.GoodsSpecs)
+    }
+
+    const spacTagChange = (i) => {
+      console.log(i, goodsForm.GoodsSpecs)
+    }
+
+    const removeGoodsSpecs = (val, i: number) => {
+      const idx = goodsForm.GoodsSpecs.indexOf(val)
+      if (idx === i) goodsForm.GoodsSpecs.splice(idx, 1)
+      console.log(goodsForm.GoodsSpecs, i, idx)
+    }
+
+    /* Reset Form */
+    const resetForm = (formEl: FormInstance | undefined) => {
+      if (!formEl) return
+      formEl.resetFields()
+    }
+
+    const resetGoodsForm = (formEl: FormInstance | undefined) => {
+      resetForm(formEl)
+      goodsForm.GoodsSpecs = []
+    }
+
+    /* initial Settings */
+
     const init = onMounted(async () => {
       await getGoodsTypeList()
       await handleSearch(true, false)
@@ -300,22 +486,31 @@ export default defineComponent({
 
     return {
       state,
+      goodsForm,
+      goodsFormRef,
       newTypeName,
+      newSpecName,
       dialogGoods,
       dialogGoodsType,
       onPageChange,
       onPageSizeChange,
       openGoodsDialog,
+      detectGoodsDialogMode,
       goodsTypeList,
       oldParams,
       handleSearch,
       getGoodsImg,
-      editGoods,
-      removeGoods,
+      handleUpdateGoods,
+      handleRemoveGoods,
       openGoodsType,
       addNewGoodsType,
+      addGoodsSpecs,
+      removeGoodsSpecs,
       handleUpdateGoodsType,
       deleteGoodsType,
+      spacTagChange,
+      resetForm,
+      resetGoodsForm,
       init
     }
   }

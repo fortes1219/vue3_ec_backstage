@@ -312,7 +312,8 @@ $shadow-color: (
         border-color: #4d4d4d;
         color: #ccc;
     }
-    .el-input__wrapper {
+    .el-input__wrapper,
+    .el-textarea__inner {
         background-color: rgba(0,0,0,0.3);
         box-shadow: 0 0 0 1px #4d4d4d inset !important;
         color: #ccc;
@@ -329,11 +330,26 @@ $shadow-color: (
             }
         }
     }
+    .el-radio-button {
+        .el-radio-button__inner {
+            background-color: bg-color(deep_dark);
+            border-color: bg-color(deep_dark);
+            border-left: none !important;
+            color: text-color(gray_light);
+        }
+        .el-radio-button__original-radio:checked+.el-radio-button__inner {
+            background-color: bg-color(confirm);
+            border-color: bg-color(confirm);
+            box-shadow: none;
+        }
+    }
 }
 
 @mixin elForm {
-    .el-form-item {
-        margin-bottom: 0;
+    .search-field {
+        .el-form-item {
+            margin-bottom: 0;
+        }
     }
 }
 
