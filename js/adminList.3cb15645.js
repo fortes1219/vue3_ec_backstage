@@ -1,1 +1,0 @@
-import{_ as a}from"./index.31a23933.js";import{f as s,a2 as e,o as r,h as t}from"./vendor.e6112f1a.js";import"./element-plus.5303a07c.js";const i=s({name:"AdminList",setup:()=>({state:e({searchParams:{}})})}),n={class:"row vertical grow flex_1","data-inset":"1rem"};var o=a(i,[["render",function(a,s,e,i,o,m){return r(),t("div",n,"Admin List")}]]);export{o as default};
