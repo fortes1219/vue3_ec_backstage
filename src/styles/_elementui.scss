@@ -212,96 +212,137 @@ $shadow-color: (
 }
 
 @mixin elButton {
-    .el-button {
-        &.is-plain {
-            &.logout {
-                background-color: transparent;
-                color: lighten(text-color(logout), 5%);
-                border-color: lighten(text-color(logout), 5%);
-                &:hover {
-                    color: text-color(light);
-                    border-color: text-color(logout);
-                    background-color: bg-color(logout);
-                }
-            }
-            &.action {
-                background-color: transparent;
-                color: lighten(text-color(heavy), 5%);
-                border-color: lighten(text-color(heavy), 5%);
-                &:hover {
-                    color: text-color(light);
-                    border-color: text-color(heavy);
-                    background-color: bg-color(heavy);
-                }
-            }
-            &.cancel {
-                background: rgba(0, 0, 0, 0);
-                color: lighten(text-color(gray_light), 5%);
-                border-color: lighten(text-color(gray_light), 5%);
-                &:hover {
-                    color: text-color(gray_light);
-                    border-color: text-color(gray_light);
-                    background: rgba(0, 0, 0, 0.15);
-                }
-            }
-        }
+    $el-btn-plain-component: (
+        logout: (
+            class: 'logout',
+            color: lighten(text-color(logout), 5%),
+            colorHover: text-color(light),
+            bgColor: transparent,
+            bgColorHover: bg-color(logout),
+            borderColor: lighten(text-color(logout), 5%),
+            borderColorHover: text-color(logout),
+        ),
+        action: (
+            class: 'action',
+            color: lighten(text-color(heavy), 5%),
+            colorHover: text-color(light),
+            bgColor: transparent,
+            bgColorHover: bg-color(heavy),
+            borderColor: lighten(text-color(heavy), 5%),
+            borderColorHover: text-color(heavy),
+        ),
+        cancel: (
+            class: 'cancel',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: rgba(0, 0, 0, 0),
+            bgColorHover: rgba(0, 0, 0, 0.15),
+            borderColor: lighten(text-color(gray_light), 5%),
+            borderColorHover: text-color(gray_light),
+        ),
+    );
+    $el-btn-component: (
+        reset: (
+            class: 'reset',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: bg-color(reset),
+            bgColorHover: lighten(bg-color(reset), 5%),
+        ),
+        search: (
+            class: 'search',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: bg-color(search),
+            bgColorHover: lighten(bg-color(search), 5%),
+        ),
+        dark: (
+            class: 'dark',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: bg-color(dark),
+            bgColorHover: lighten(bg-color(dark), 5%),
+            radius: 60px,
+        ),
+        deepDark: (
+            class: 'deep_dark',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: bg-color(deep_dark),
+            bgColorHover: lighten(bg-color(deep_dark), 5%),
+            radius: 60px,
+        ),
+        remove: (
+            class: 'remove',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: bg-color(remove),
+            bgColorHover: lighten(bg-color(remove), 5%),
+            radius: 60px,
+        ),
+        confirm: (
+            class: 'confirm',
+            color: lighten(text-color(gray_light), 5%),
+            colorHover: text-color(gray_light),
+            bgColor: bg-color(confirm),
+            bgColorHover: lighten(bg-color(confirm), 5%),
+        )
+    );
 
-        &.reset {
-            border: none;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(reset);
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(reset), 5%);
+    @each $name, $value in $el-btn-component {
+        $class: map-get($value, class);
+        $color: map-get($value, color);
+        $colorHover: map-get($value, colorHover);
+        $bgColor: map-get($value, bgColor);
+        $bgColorHover: map-get($value, bgColorHover);
+        $radius: map-get($value, radius);
+        .el-button {
+            &.#{$class} {
+                &:not(.is-text,.is-link,.el-button--text):focus {
+                    color: $color;
+                    background-color: $bgColor;
+                }
+                border: none;
+                color: $color;
+                background-color: $bgColor;
+                border-radius: $radius;
+                &:hover {
+                    color: $colorHover;
+                    background-color: $bgColorHover;
+                }
             }
         }
-        &.search {
-            border: none;
-            min-width: 100px;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(search);
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(search), 5%);
-            }
-        }
-        &.dark {
-            border: none;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(dark);
-            border-radius: 60px;
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(dark), 5%);
-            }
-        }
-        &.deep_dark {
-            border: none;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(deep_dark);
-            border-radius: 60px;
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(deep_dark), 5%);
-            }
-        }
-        &.remove {
-            border: none;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(remove);
-            border-radius: 60px;
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(remove), 5%);
-            }
-        }
-        &.confirm {
-            border: none;
-            color: lighten(text-color(gray_light), 5%);
-            background-color: bg-color(confirm);
-            &:hover {
-                color: text-color(gray_light);
-                background-color: lighten(bg-color(confirm), 5%);
+    }
+
+    @each $name, $value in $el-btn-plain-component {
+        $class: map-get($value, class);
+        $color: map-get($value, color);
+        $colorHover: map-get($value, colorHover);
+        $bgColor: map-get($value, bgColor);
+        $bgColorHover: map-get($value, bgColorHover);
+        $borderColor: map-get($value, borderColor);
+        $borderColorHover: map-get($value, borderColorHover);
+        $radius: map-get($value, radius);
+        .el-button {
+            &.is-plain {
+                &.#{$class} {
+                    &:not(.is-text,.is-link,.el-button--text):focus {
+                        color: $color;
+                        background-color: $bgColor;
+                        background: $bgColor;
+                    }
+                    color: $color;
+                    background-color: $bgColor;
+                    background: $bgColor;
+                    border-radius: $radius;
+                    border-color: $borderColor;
+                    &:hover {
+                        color: $colorHover;
+                        background-color: $bgColorHover;
+                        background: $bgColorHover;
+                        border-color: $borderColorHover;
+                    }
+                }
             }
         }
     }
