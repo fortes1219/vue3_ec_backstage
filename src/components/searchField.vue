@@ -1,16 +1,11 @@
 <template>
+  <!--Search-->
   <div class="search-field"><slot /></div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'SearchField',
-  setup() {
-    const state = reactive({})
-    return {
-      state
-    }
-  }
+  name: 'SearchField'
 })
 </script>

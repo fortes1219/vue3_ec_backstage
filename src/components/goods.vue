@@ -43,7 +43,11 @@
       </div>
     </div>
     <div class="row vertical grow flex_1">
-      <el-table :data="state.tableData" style="width: 100%; height: 100%">
+      <el-table
+        :data="state.tableData"
+        :default-sort="{ prop: 'ID', order: 'descending' }"
+        style="width: 100%; height: 100%"
+      >
         <el-table-column label="ID" prop="ID" sortable align="center" width="100"></el-table-column>
         <el-table-column label="商品名稱" prop="Name" align="center"></el-table-column>
         <el-table-column label="商品分類" prop="GoodsType.Name" align="center"></el-table-column>
@@ -140,11 +144,12 @@
 
   <!--商品管理-->
   <el-dialog
+    :key="`dialog-${state.editMode}`"
     v-model="dialogGoods"
     width="600px"
     :close-on-click-modal="false"
     :title="detectGoodsDialogMode"
-    @close="resetGoodsForm(goodsFormRef)"
+    @close="resetGoodsForm"
   >
     <hr />
     <el-form ref="goodsFormRef" :model="goodsForm" label-width="80px">
@@ -235,10 +240,10 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button plain class="cancel" @click="dialogGoods = false">Cancel</el-button>
-        <el-button v-if="state.editMode !== 'edit'" plain class="cancel" @click="resetGoodsForm(goodsFormRef)">
-          Reset
+        <el-button v-if="state.editMode !== 'edit'" plain class="cancel" @click="resetGoodsForm"> Reset </el-button>
+        <el-button type="primary" class="confirm" @click="handleUpdateGoods(state.editMode !== 'edit' ? true : false)">
+          Confirm
         </el-button>
-        <el-button type="primary" class="confirm" @click="handleUpdateGoods">Confirm</el-button>
       </span>
     </template>
   </el-dialog>
@@ -250,7 +255,7 @@ import { goodsModules } from '@/store/goods'
 import { callApi } from '@/utils/callApi'
 import {
   getImg,
-  // addGoods,
+  addGoods,
   addGoodsType,
   getGoodsList,
   updateGoods,
@@ -260,16 +265,13 @@ import {
   updateGoodsType,
   removeImg
 } from '@/service/api'
-import SearchField from '@/components/SearchField.vue'
 import type { FormInstance } from 'element-plus'
 
 // type goodsTypeArray = Ref<{ ID: number; Name: string }[]>
 
 export default defineComponent({
   name: 'Goods',
-  components: {
-    SearchField
-  },
+  components: {},
   setup() {
     const goodsStore = goodsModules()
     const goodsFormRef = ref<FormInstance>()
@@ -299,8 +301,8 @@ export default defineComponent({
       ImagesIdnet: '',
       Description: ''
     })
-    const dialogGoods = ref(false)
-    const dialogGoodsType = ref(false)
+    const dialogGoods: Ref<boolean> = ref(false)
+    const dialogGoodsType: Ref<boolean> = ref(false)
     const newTypeName = ref('')
     const newSpecName = ref('')
 
@@ -364,6 +366,7 @@ export default defineComponent({
       const caseObj = {
         add: () => {
           state.editMode = 'add'
+          resetGoodsForm(goodsFormRef.value)
         },
         edit: () => {
           state.editMode = 'edit'
@@ -380,10 +383,13 @@ export default defineComponent({
       console.log(dialogGoods.value)
     }
 
-    const handleUpdateGoods = () => {
+    const handleUpdateGoods = (isNewGoods = false) => {
       const jwt = parseObj(goodsForm)
+      if (isNewGoods) delete jwt.ID
+      jwt.SpecsAllowance = jwt.SpecsAllowance * 1
+      jwt.UnitPrice = jwt.UnitPrice * 1
       console.log(jwt)
-      callApi(updateGoods, jwt, async () => {
+      callApi(isNewGoods ? addGoods : updateGoods, jwt, async () => {
         await handleSearch(false, false)
         dialogGoods.value = false
         ElMessage({
@@ -393,7 +399,7 @@ export default defineComponent({
       })
     }
 
-    const detectGoodsDialogMode = computed(() => {
+    const detectGoodsDialogMode = computed((): string => {
       let result = ''
       const caseObj = {
         add: () => {
@@ -510,10 +516,16 @@ export default defineComponent({
       formEl.resetFields()
     }
 
-    const resetGoodsForm = (formEl: FormInstance | undefined) => {
-      resetForm(formEl)
+    const resetGoodsForm = () => {
+      goodsForm.ID = null
+      goodsForm.Show = true
+      goodsForm.GoodsTypeID = 1
+      goodsForm.Name = ''
+      goodsForm.SpecsAllowance = 0
       goodsForm.GoodsSpecs = []
-      goodsForm.Name
+      goodsForm.UnitPrice = 0
+      goodsForm.ImagesIdnet = ''
+      goodsForm.Description = ''
     }
 
     /* Image Upload Events */
@@ -553,15 +565,18 @@ export default defineComponent({
         })
         return
       }
+      if (!state.goodsImg.hasOwnProperty(goodsForm.ImagesIdnet)) {
+        state.goodsImg[goodsForm.ImagesIdnet] = []
+      }
       fetch('/api' + '/admin/image/c', options)
         .then((res) => res.json())
         .then((res) => {
           state.goodsImg[goodsForm.ImagesIdnet].push(res.Data)
+          console.log(res, state.goodsImg)
           ElMessage({
             type: 'success',
             message: '已成功上傳圖片'
           })
-          console.log(state.goodsImg)
         })
         .catch(() => {
           ElMessage({

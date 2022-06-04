@@ -59,3 +59,5 @@ export function request(config) {
   )
   return service(config)
 }
+
+console.log(import.meta.env.MODE)
