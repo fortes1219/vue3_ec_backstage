@@ -34,24 +34,25 @@ html, body {
     @include flexBox(row, center, flex-start);
     @include boxSizing;
     position: relative;
-    width: 120px;
+    width: auto;
     height: 34px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0 1rem;
     cursor: pointer;
-    &::before {
-        content: "";
-        display: block;
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        background: url('/img/icon-upload_2.svg') no-repeat center;
-        background-size: contain;
-    }
     span {
+        display: inline-flex;
         font-size: 0.85rem;
+        padding: 0 16px 0 10px;
         white-space: nowrap;
+        &.upload-btn {
+            @include flexBox(row, center, center);
+            color: #d9d9d9;
+            border-radius: 34px;
+            background-color: bg-color(deep_dark);
+            .el-icon {
+                width: 16px;
+                height: 16px;
+                margin-right: 5px;
+            }
+        }
     }
     input[type="file"] {
         position: absolute;
@@ -62,7 +63,53 @@ html, body {
     }
 }
 
+.upload-file-name {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 h2.title {
     font-size: 2rem;
     color: text-color(gray_light)
+}
+
+.goods-img-preview {
+    @include boxSizing;
+    display: block;
+    width: 100%;
+    padding: 1rem 0;
+    .img-preview__items {
+        @include flexBox(row, center, space-between);
+        @include boxSizing;
+        width: 100%;
+        height: 90px;
+        padding-right: 1rem;
+        margin-bottom: 0.5rem;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        border: 1px solid #999;
+        .el-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .img-container {
+            @include flexBox(row, center, center);
+            width: 120px;
+            height: 100%;
+            background-color: bg-color(light);
+            img {
+                width: auto;
+                height: 100%;
+            }
+        }
+    }
 }
