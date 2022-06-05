@@ -366,7 +366,7 @@ export default defineComponent({
       const caseObj = {
         add: () => {
           state.editMode = 'add'
-          resetGoodsForm(goodsFormRef.value)
+          resetGoodsForm()
         },
         edit: () => {
           state.editMode = 'edit'
@@ -568,7 +568,7 @@ export default defineComponent({
       if (!state.goodsImg.hasOwnProperty(goodsForm.ImagesIdnet)) {
         state.goodsImg[goodsForm.ImagesIdnet] = []
       }
-      const baseUrl = import.meta.env.MODE === 'production' ? 'https://nocodenolife.net/fortes/' : '/api'
+      const baseUrl = import.meta.env.MODE === 'production' ? import.meta.env.VITE_BASE_API : '/api'
       fetch(baseUrl + '/admin/image/c', options)
         .then((res) => res.json())
         .then((res) => {
