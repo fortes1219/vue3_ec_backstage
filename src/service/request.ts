@@ -49,7 +49,6 @@ export function request(config) {
   // response攔截
   service.interceptors.response.use(
     (response) => {
-      console.log('res', response)
       return response
     },
     (error) => {

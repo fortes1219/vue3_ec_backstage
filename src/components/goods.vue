@@ -589,13 +589,11 @@ export default defineComponent({
     const getGoodsImg = async (ident: string) => {
       callApi(getImg, { Ident: ident }, (res) => {
         state.goodsImg[ident] = res.data.Data
-        console.log(state.goodsImg)
       })
     }
 
     const getcurrentImgs = computed(() => {
       const obj = { ...state.goodsImg }
-      console.log(obj)
       return obj
     })
 
