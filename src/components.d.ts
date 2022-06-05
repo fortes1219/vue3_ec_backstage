@@ -26,7 +26,7 @@ declare module 'vue' {
     Icons: typeof import('./components/icons.vue')['default']
     Member: typeof import('./components/member.vue')['default']
     Order: typeof import('./components/order.vue')['default']
-    SearchField: typeof import('./components/SearchField.vue')['default']
+    SearchField: typeof import('./components/searchField.vue')['default']
     Upload_backup: typeof import('./components/upload_backup.vue')['default']
   }
 }

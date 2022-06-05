@@ -568,7 +568,8 @@ export default defineComponent({
       if (!state.goodsImg.hasOwnProperty(goodsForm.ImagesIdnet)) {
         state.goodsImg[goodsForm.ImagesIdnet] = []
       }
-      fetch('/api' + '/admin/image/c', options)
+      const baseUrl = import.meta.env.MODE === 'production' ? 'https://nocodenolife.net/fortes/' : '/api'
+      fetch(baseUrl + '/admin/image/c', options)
         .then((res) => res.json())
         .then((res) => {
           state.goodsImg[goodsForm.ImagesIdnet].push(res.Data)
