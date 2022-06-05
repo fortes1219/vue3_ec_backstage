@@ -1,8 +1,12 @@
 @mixin flexBox($direction, $alignItems, $justifyContent) {
     display: flex;
     flex-direction: $direction;
-    align-items: $alignItems;
-    justify-content: $justifyContent;
+    @if ($alignItems != null) {
+        align-items: $alignItems;
+    }
+    @if ($justifyContent != null) {
+        justify-content: $justifyContent;
+    }
 }
 
 @mixin boxSizing {
@@ -23,17 +27,34 @@
     }
 }
 
-.row {
+@each $direction in 'right', 'left', 'top', 'bottom' {
+    @for $i from 0 through 4 {
+        .sp_#{$direction} {
+            margin-#{$direction}: 1rem;
+        }   
+    }
+}
+
+@for $i from 0 through 100 {
+    .w-#{$i * 5px} {
+        width: $i * 5px;
+    }
+}
+
+.flx {
     @include boxSizing;
     position: relative;
     width: 100%;
-    margin: 0;
 
     &.horizontal {
-        @include flexBox(row, flex-start, flex-start);
+        @include flexBox(row, null, null);
         
         &.v_center {
-            @include flexBox(row, center, flex-start);
+            @include flexBox(row, center, null);
+        }
+
+        &.v_center_end {
+            @include flexBox(row, center, flex-end);
         }
 
         &.h_center {
@@ -45,7 +66,7 @@
         }
 
         &.bottom_left {
-            @include flexBox(row, flex-end, flex-start);
+            @include flexBox(row, flex-end, null);
         }
 
         &.bottom_center {
@@ -62,22 +83,22 @@
     }
 
     &.vertical {
-        @include flexBox(column, flex-start, flex-start);
+        @include flexBox(column, null, null);
         
         &.v_center {
-            @include flexBox(column, flex-start, center);
+            @include flexBox(column, null, center);
         }
 
         &.h_center {
-            @include flexBox(column, center, flex-start);
+            @include flexBox(column, center, null);
         }
 
         &.h_end {
-            @include flexBox(column, flex-end, flex-start);
+            @include flexBox(column, flex-end, null);
         }
 
         &.bottom_left {
-            @include flexBox(column, flex-start, flex-end);
+            @include flexBox(column, null, flex-end);
         }
 
         &.bottom_center {
@@ -87,11 +108,6 @@
         &.bottom_right {
             @include flexBox(column, flex-end, flex-end);
         }
-    }
-
-    &.center {
-        align-items: center;
-        justify-content: center;
     }
 
     &.space_between {
@@ -104,6 +120,11 @@
 
     &.space_evenly {
         justify-content: space-evenly;
+    }
+
+    &.center {
+        align-items: center;
+        justify-content: center;
     }
 
     &.grow {

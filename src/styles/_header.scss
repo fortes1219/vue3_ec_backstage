@@ -1,0 +1,22 @@
+.header {
+    @include flexBox(row, center, space-between);
+    @include boxSizing;
+    padding: 0 1rem;
+    width: 100%;
+    height: 74px;
+    background: rgba(0,0,0,0.5);
+    .el-icon {
+        width: 1.15rem;
+    }
+    .route-name {
+        white-space: nowrap;
+        font-size: 1.15rem;
+        color: #ccc;
+    }
+    .user-status {
+        @include flexBox(row, center, flex-start);
+        font-size: 1.2rem;
+        color: #ccc;
+        height: 100%;
+    }
+}
