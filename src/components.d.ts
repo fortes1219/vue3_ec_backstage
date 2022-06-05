@@ -8,7 +8,6 @@ declare module 'vue' {
     Aside: typeof import('./components/aside.vue')['default']
     Dashboard: typeof import('./components/dashboard.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
@@ -26,7 +25,7 @@ declare module 'vue' {
     Icons: typeof import('./components/icons.vue')['default']
     Member: typeof import('./components/member.vue')['default']
     Order: typeof import('./components/order.vue')['default']
-    SearchField: typeof import('./components/SearchField.vue')['default']
+    SearchField: typeof import('./components/searchField.vue')['default']
     Upload_backup: typeof import('./components/upload_backup.vue')['default']
   }
 }
