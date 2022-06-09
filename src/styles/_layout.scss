@@ -113,3 +113,47 @@ h2.title {
         }
     }
 }
+
+.admin-card {
+    @include easeInOutQuint(0.3s);
+    display: flex;
+    align-items: stretch;
+    width: calc(100% / 5);
+    min-width: 240px;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.2rem;
+    color: #00A99D;
+    .admin-card__content {
+        @include flexBox(column, null, null);
+        @include boxSizing;
+        padding: 1rem;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.3);
+        border-radius: 12px;
+        p.admin-account {
+            @include easeInOutQuint(0.3s);
+            font-size: 1.6rem;
+            margin: 1rem 0;
+            color: #ccc;
+        }
+    
+        p.notice {
+            color: #C7B299;
+        }
+        
+        hr {
+            margin-bottom: 1rem;
+            border-color: #444;
+        }
+        &:hover {
+            @include easeInOutQuint(0.3s);
+            box-shadow: 0 0 10px rgba(0,0,0,0.7);
+            .admin-account {
+                @include easeInOutQuint(0.3s);
+                text-shadow: 0 0 20px rgb(255, 45, 45);
+            }
+        }
+    }
+}

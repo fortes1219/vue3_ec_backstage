@@ -30,6 +30,7 @@ import { reactive, onMounted } from 'vue'
 import { getOtp, userLogin } from '@/service/api'
 import { ElMessage } from 'element-plus'
 import { userModules } from '@/store/user'
+import { callApi } from '@/utils/callApi'
 
 type LoginForm = {
   title: string
@@ -51,8 +52,8 @@ export default defineComponent({
     const state: LoginForm = reactive({
       title: 'Admin Login',
       form: {
-        username: '',
-        password: '',
+        username: 'fortes',
+        password: '978978',
         otp: ''
       },
       currentOtp: '',
@@ -77,17 +78,16 @@ export default defineComponent({
         password: state.form.password,
         otp: state.form.otp
       }
-      const res = await userLogin(jwt)
-      if (res.data.Code === 200) {
+      await callApi(userLogin, jwt, async (res) => {
         state.token = res.data.Data.Token
         await userStore.setUserStatus({
+          id: res.data.Data.Info.ID,
           account: res.data.Data.Info.Account,
           username: res.data.Data.Info.Name,
           token: res.data.Data.Token
         })
-        await router.push({ name: 'Home' })
-        console.log(userStore.userStatus)
-      }
+      })
+      await router.push({ name: 'Home' })
     }
 
     const init = onMounted(async () => {

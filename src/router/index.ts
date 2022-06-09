@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { PermissionType, checkPermissionsId } from '@/service/permissions'
 import NProgress from 'nprogress'
 
 NProgress.configure({ showSpinner: false })
@@ -20,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       name: 'Home',
       requiresAuth: true,
-      permissionId: ''
+      permissionId: PermissionType.home_dashboard
     },
     children: [
       {
@@ -30,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           name: 'Dashboard',
           requiresAuth: true,
-          permissionId: ''
+          permissionId: PermissionType.home_dashboard
         }
       },
       {
@@ -40,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           name: '訂單管理',
           requiresAuth: true,
-          permissionId: ''
+          permissionId: PermissionType.order_manage_page
         }
       },
       {
@@ -50,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           name: '商品管理',
           requiresAuth: true,
-          permissionId: ''
+          permissionId: PermissionType.goods_manage_page
         }
       },
       {
@@ -60,7 +61,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           name: '會員管理',
           requiresAuth: true,
-          permissionId: ''
+          permissionId: PermissionType.member_manage_page
         }
       },
       {
@@ -70,7 +71,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           name: '管理員列表',
           requiresAuth: true,
-          permissionId: ''
+          permissionId: PermissionType.admin_manage_page
         }
       }
     ]
@@ -84,17 +85,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  interface userInfo {
-    username: string
-    token: string
-  }
-  const userInfo: userInfo = JSON.parse(localStorage.getItem('userInfo') as string)
+  const userInfo = JSON.parse(localStorage.getItem('userInfo') as string)
+  const userPermission = JSON.parse(localStorage.getItem('userPermissions') as string)
   if (to.meta.requiresAuth) {
-    if (userInfo && userInfo.token !== '') {
-      next()
-    } else {
-      next('/')
+    if (userPermission) {
+      console.log(
+        checkPermissionsId(userPermission, to.meta.permissionId as PermissionType),
+        to.meta.permissionId,
+        userPermission
+      )
     }
+    userInfo && userInfo.token !== '' ? next() : next('/')
   } else {
     next()
   }

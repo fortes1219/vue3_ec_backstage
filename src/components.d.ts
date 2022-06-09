@@ -6,6 +6,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AdminList: typeof import('./components/adminList.vue')['default']
     Aside: typeof import('./components/aside.vue')['default']
+    Card: typeof import('./components/card.vue')['default']
     Dashboard: typeof import('./components/dashboard.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']

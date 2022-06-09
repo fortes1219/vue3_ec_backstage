@@ -346,6 +346,13 @@ $shadow-color: (
             }
         }
     }
+
+    .el-button.is-disabled,
+    .el-button.is-disabled:focus,
+    .el-button.is-disabled:hover {
+        background-color: #999;
+        opacity: 0.4;
+    }
 }
 
 @mixin elInput {
