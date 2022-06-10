@@ -53,8 +53,8 @@ export default defineComponent({
     const state: LoginForm = reactive({
       title: 'Admin Login',
       form: {
-        username: 'fortes',
-        password: '978978',
+        username: '',
+        password: '',
         otp: ''
       },
       currentOtp: '',
