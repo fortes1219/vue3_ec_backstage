@@ -1,0 +1,1 @@
+import{_ as e}from"./index.5e393875.js";import{f as r,a5 as a,o as s,h as t}from"./vendor.f296c83d.js";import"./element-plus.b146bdb7.js";const m=r({name:"Member",setup:()=>({state:a({searchParams:{}})})}),o={class:"flx vertical grow flex_1","data-inset":"1rem"};var n=e(m,[["render",function(e,r,a,m,n,d){return s(),t("div",o,"Member")}]]);export{n as default};
