@@ -31,6 +31,7 @@ import { getOtp, userLogin } from '@/service/api'
 import { ElMessage } from 'element-plus'
 import { userModules } from '@/store/user'
 import { callApi } from '@/utils/callApi'
+import { getAdminPermissions } from '@/service/api'
 
 type LoginForm = {
   title: string
@@ -72,6 +73,20 @@ export default defineComponent({
       }
     }
 
+    /* 取得當前管理員的權限列表後，更新userStore的權限列表 */
+    const getPermissions = async () => {
+      const uid = userStore.$state.userStatus.id
+      const jwt = { MemberID: uid }
+      await callApi(getAdminPermissions, jwt, (res) => {
+        userStore.setUserPermissions(res.data.Data.Permission)
+      })
+    }
+
+    const handleRouterChange = async () => {
+      await getPermissions()
+      await router.push({ name: 'Home' })
+    }
+
     const handleLogin = async () => {
       const jwt: LoginForm['form'] = {
         username: state.form.username,
@@ -87,7 +102,7 @@ export default defineComponent({
           token: res.data.Data.Token
         })
       })
-      await router.push({ name: 'Home' })
+      await handleRouterChange()
     }
 
     const init = onMounted(async () => {

@@ -88,14 +88,16 @@ router.beforeEach((to, from, next) => {
   const userInfo = JSON.parse(localStorage.getItem('userInfo') as string)
   const userPermission = JSON.parse(localStorage.getItem('userPermissions') as string)
   if (to.meta.requiresAuth) {
-    if (userPermission) {
-      console.log(
-        checkPermissionsId(userPermission, to.meta.permissionId as PermissionType),
-        to.meta.permissionId,
-        userPermission
-      )
+    const allowance = checkPermissionsId(userPermission, to.meta.permissionId as PermissionType)
+    console.log(userPermission)
+    /* 若沒有相關權限，就踢回login page */
+    if (userInfo && userInfo.token !== '' && allowance) {
+      next()
+    } else {
+      next('/')
+      localStorage.removeItem('userInfo')
+      localStorage.removeItem('userPermissions')
     }
-    userInfo && userInfo.token !== '' ? next() : next('/')
   } else {
     next()
   }
