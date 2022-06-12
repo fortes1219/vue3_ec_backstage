@@ -259,7 +259,7 @@ import {
   addGoodsType,
   getGoodsList,
   updateGoods,
-  // updateGoodsType,
+  removeGoodsSpec,
   removeGoods,
   removeGoodsType,
   updateGoodsType,
@@ -504,10 +504,15 @@ export default defineComponent({
       console.log(i, goodsForm.GoodsSpecs)
     }
 
-    const removeGoodsSpecs = (val, i: number) => {
+    const removeGoodsSpecs = async (val, i: number) => {
       const idx = goodsForm.GoodsSpecs.indexOf(val)
       if (idx === i) goodsForm.GoodsSpecs.splice(idx, 1)
-      console.log(goodsForm.GoodsSpecs, i, idx)
+      await callApi(removeGoodsSpec, { ID: val.ID }, () => {
+        ElMessage({
+          message: `已移除 ${val.Specs} ID: ${val.ID}`,
+          type: 'success'
+        })
+      })
     }
 
     /* Reset Form */

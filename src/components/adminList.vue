@@ -1,7 +1,15 @@
 <template>
   <div class="flx vertical grow flex_1" data-inset="1rem">
     <div class="flx horizontal v_center">
-      <el-button type="primary" :disabled="!enable.add" class="deep_dark" round icon="Plus">新增管理員</el-button>
+      <el-button
+        type="primary"
+        :disabled="!enable.add"
+        class="deep_dark"
+        round
+        icon="Plus"
+        @click="dialogAddMember = true"
+        >新增管理員</el-button
+      >
     </div>
     <div class="flx horizontal wrap sp_top">
       <AdminCard v-for="(item, i) in state.tableData" :key="i" :data="item">
@@ -25,7 +33,35 @@
       </AdminCard>
     </div>
   </div>
-  <el-dialog v-model="dialogPermissions" width="570px" title="管理權限設定">
+  <el-dialog v-model="dialogAddMember" width="400px" title="新增管理員" @close="onCloseDialog">
+    <el-form ref="adminAddForm" :model="state.adminForm" :rules="formRules" label-width="100px">
+      <el-form-item label="管理帳號:" prop="account">
+        <el-input v-model="state.adminForm.account" type="text" placeholder="管理員帳號" />
+      </el-form-item>
+      <el-form-item label="顯示名稱:" prop="username">
+        <el-input v-model="state.adminForm.username" type="text" placeholder="顯示名稱" />
+      </el-form-item>
+      <el-form-item label="管理密碼:" prop="password">
+        <el-input v-model="state.adminForm.password" type="password" placeholder="管理員密碼" />
+      </el-form-item>
+      <el-form-item label="確認密碼:" prop="checkPassword">
+        <el-input v-model="state.adminForm.checkPassword" type="password" placeholder="請確認管理員密碼" />
+      </el-form-item>
+      <el-form-item label="Email:" prop="email">
+        <el-input v-model="state.adminForm.email" type="text" placeholder="管理員電子信箱" />
+      </el-form-item>
+      <el-form-item label="聯絡方式:" prop="phone">
+        <el-input v-model="state.adminForm.phone" type="text" placeholder="手機或電話" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button plain class="cancel" @click="dialogAddMember = false">Cancel</el-button>
+        <el-button type="primary" class="confirm" @click="addMember(adminAddForm)">Confirm</el-button>
+      </span>
+    </template>
+  </el-dialog>
+  <el-dialog v-model="dialogPermissions" width="570px" title="管理權限設定" @close="onCloseDialog">
     <el-form label-width="100px">
       <el-form-item label="管理帳號:">
         <p>{{ `${state.adminForm.account} (ID: ${state.adminForm.id})` }}</p>
@@ -77,7 +113,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, computed, onMounted, Ref } from 'vue'
 import { callApi } from '@/utils/callApi'
-import type { FormInstance } from 'element-plus'
+import type { FormRules, FormInstance } from 'element-plus'
 import { PermissionsName } from '@/service/permissions'
 import {
   getAdminMembers,
@@ -86,6 +122,7 @@ import {
   getAdminPermissions,
   updateAdminPermissions
 } from '@/service/api'
+import { resetForm } from '@/utils/resetForm'
 import AdminCard from '@/components/card.vue'
 import { userModules } from '@/store/user'
 
@@ -98,6 +135,7 @@ export default defineComponent({
     const userStore = userModules()
     const state: adminListStateType = reactive({
       tableData: [],
+      mode: '',
       adminForm: {
         id: null,
         account: '',
@@ -115,8 +153,29 @@ export default defineComponent({
         admin: []
       }
     })
+
+    const adminAddForm = ref<FormInstance>()
+    const formRules = reactive<FormRules>({
+      account: [{ required: true, message: '帳號不可留空', trigger: 'blur' }],
+      username: [{ required: true, message: '顯示名稱不可留空', trigger: 'blur' }],
+      password: [{ required: true, message: '密碼不可留空', trigger: 'blur' }],
+      checkPassword: [{ validator: handleCheckPassword, trigger: 'blur' }]
+    })
+    function handleCheckPassword(rule, value, callback) {
+      if (value === '') callback(new Error('確認密碼欄位不可留空'))
+      if (state.adminForm.checkPassword !== state.adminForm.password) {
+        callback(new Error('密碼不一致，請再次確認'))
+      } else {
+        if (state.adminForm.password === state.adminForm.checkPassword) {
+          adminAddForm.value?.validateField('checkPassword', () => null)
+        }
+        callback()
+      }
+    }
+
     const listName = PermissionsName
     const dialogPermissions: Ref<boolean> = ref(false)
+    const dialogAddMember: Ref<boolean> = ref(false)
     const openPermissions = async (obj) => {
       console.log('###open: ', obj.ID)
       await createPermissionsList(obj)
@@ -128,8 +187,8 @@ export default defineComponent({
       dialogPermissions.value = true
     }
 
-    const getAdminList = () => {
-      callApi(getAdminMembers, {}, (res) => {
+    const getAdminList = async () => {
+      await callApi(getAdminMembers, {}, (res) => {
         state.tableData = res.data.Data
         console.log(state.tableData)
       })
@@ -137,6 +196,37 @@ export default defineComponent({
 
     const userInfo = computed(() => userStore.$state.userStatus)
     const userPermissions = computed(() => userStore.$state.userPermissions)
+
+    /* 新增管理員 */
+    const addMember = (formEl: FormInstance | undefined) => {
+      if (!formEl) return
+      formEl.validate(async (valid) => {
+        if (valid) {
+          const jwt = {
+            Account: state.adminForm.account,
+            Password: state.adminForm.password,
+            Name: state.adminForm.username,
+            Email: state.adminForm.email,
+            Phone: state.adminForm.phone,
+            Admin: true
+          }
+          await callApi(addAdminMembers, jwt, () => {
+            getAdminList()
+            ElMessage({
+              type: 'success',
+              message: '成功新增管理員!'
+            })
+            dialogAddMember.value = false
+          })
+        } else {
+          ElMessage({
+            type: 'error',
+            message: '表單內容錯誤，請重新檢查!'
+          })
+          return false
+        }
+      })
+    }
 
     /* 開啟權限設定時，製作一份顯示權限UI的清單物件 */
     const createPermissionsList = async (obj) => {
@@ -167,6 +257,7 @@ export default defineComponent({
       console.log(state.permissions)
     }
 
+    /* 更新管理員權限 */
     const handleUpdatePermissions = async () => {
       const obj = {}
       const pool = Object.keys(state.permissions)
@@ -192,6 +283,14 @@ export default defineComponent({
       })
     }
 
+    /* 關閉Dialog時清除資料 */
+    const onCloseDialog = () => {
+      resetForm(state.adminForm)
+      resetForm(state.permissions)
+      console.log(state.adminForm, state.permissions)
+    }
+
+    /* UI權限 */
     const enable = computed(() => {
       const permissions = JSON.parse(localStorage.getItem('userPermissions') as string)
       return {
@@ -207,6 +306,8 @@ export default defineComponent({
 
     return {
       state,
+      formRules,
+      adminAddForm,
       init,
       listName,
       getAdminList,
@@ -215,8 +316,11 @@ export default defineComponent({
       enable,
       createPermissionsList,
       openPermissions,
+      addMember,
       handleUpdatePermissions,
-      dialogPermissions
+      dialogPermissions,
+      dialogAddMember,
+      onCloseDialog
     }
   }
 })

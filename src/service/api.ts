@@ -85,6 +85,15 @@ export const removeGoods = (params) =>
     params
   })
 
+/* remove goods specs */
+export const removeGoodsSpec = (params) =>
+  request({
+    url: '/admin/goods/specs/d',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
 /* Get goods type list */
 export const getGoodsType = (params) =>
   request({

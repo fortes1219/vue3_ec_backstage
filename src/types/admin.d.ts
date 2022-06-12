@@ -9,6 +9,7 @@ type adminCardType = {
 
 type adminListStateType = {
   tableData: adminCardType[]
+  mode: string
   adminForm: {
     id: number | null
     account: string
