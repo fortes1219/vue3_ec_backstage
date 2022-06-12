@@ -9,4 +9,20 @@ type adminCardType = {
 
 type adminListStateType = {
   tableData: adminCardType[]
+  adminForm: {
+    id: number | null
+    account: string
+    username: string
+    email: string
+    phone: string
+    password: string
+    checkPassword: string
+  }
+  permissions: {
+    home: { name: string; value: boolean }[]
+    order: { name: string; value: boolean }[]
+    goods: { name: string; value: boolean }[]
+    member: { name: string; value: boolean }[]
+    admin: { name: string; value: boolean }[]
+  }
 }

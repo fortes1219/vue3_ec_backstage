@@ -466,6 +466,20 @@ $shadow-color: (
         }
     }
 }
+.el-checkbox {
+    .el-checkbox__inner {
+        background-color: rgba(0, 0, 0, 0.15);
+        border-color: rgba(0, 0, 0, 0.15);
+    }
+    .el-checkbox__input.is-checked .el-checkbox__inner {
+        background-color: bg-color(confirm);
+        border-color: bg-color(confirm);
+    }
+    .el-checkbox__input.is-checked+.el-checkbox__label {
+        color: #ccc;
+    }
+}
+
 
 ::placeholder,
 ::-webkit-input-placeholder {

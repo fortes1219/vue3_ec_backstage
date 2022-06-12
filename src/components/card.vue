@@ -3,7 +3,7 @@
     <div class="admin-card__content">
       <p>管理員ID：{{ data.ID }}</p>
       <p>{{ data.Email }}</p>
-      <p class="admin-account">{{ data.Account }}</p>
+      <p class="admin-account">{{ data.Name }}</p>
       <hr />
       <slot />
     </div>

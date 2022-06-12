@@ -76,6 +76,10 @@ h2.title {
     color: text-color(gray_light)
 }
 
+h2.permissions-title {
+    font-size: 1.3rem;
+}
+
 .goods-img-preview {
     @include boxSizing;
     display: block;
@@ -120,7 +124,7 @@ h2.title {
     align-items: stretch;
     width: calc(100% / 5);
     min-width: 240px;
-    padding: 0.5rem;
+    padding: 0 1rem 1rem 0;
     font-size: 0.75rem;
     line-height: 1.2rem;
     color: #00A99D;
