@@ -17,15 +17,7 @@
           >
             權限設定
           </el-button>
-          <el-button
-            type="primary"
-            :disabled="!enable.delete"
-            round
-            class="remove"
-            icon="Delete"
-            size="small"
-            @click="createPermissionsList"
-          >
+          <el-button type="primary" :disabled="!enable.delete" round class="remove" icon="Delete" size="small">
             刪除
           </el-button>
         </div>
