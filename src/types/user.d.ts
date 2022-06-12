@@ -1,4 +1,5 @@
 type userInfoType = {
+  id: number | null
   account: string
   username: string
   token: string

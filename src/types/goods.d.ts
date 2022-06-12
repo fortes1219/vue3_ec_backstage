@@ -8,7 +8,13 @@ type goodsStateType = {
   tableData: any[]
   typeList: { ID: number; Name: string; Alias?: string }[]
   editMode: 'add' | 'edit'
+  imgFile: File | null
+  imgFileName: string
+  imgIdent: string
+  goodsImg: any
 }
+
+type goodsImgs = { ID: number; Ident: string; Url: string }[]
 
 type goodsFormType = {
   ID?: number | null
@@ -19,7 +25,7 @@ type goodsFormType = {
   SpecsAllowance: number
   GoodsSpecs: { Specs: string }[]
   UnitPrice: number | string
-  ImagesIdent: string
+  ImagesIdnet: string
   Description: string
 }
 

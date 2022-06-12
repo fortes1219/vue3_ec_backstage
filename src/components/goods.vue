@@ -43,13 +43,17 @@
       </div>
     </div>
     <div class="row vertical grow flex_1">
-      <el-table :data="state.tableData" style="width: 100%; height: 100%">
+      <el-table
+        :data="state.tableData"
+        :default-sort="{ prop: 'ID', order: 'descending' }"
+        style="width: 100%; height: 100%"
+      >
         <el-table-column label="ID" prop="ID" sortable align="center" width="100"></el-table-column>
         <el-table-column label="商品名稱" prop="Name" align="center"></el-table-column>
         <el-table-column label="商品分類" prop="GoodsType.Name" align="center"></el-table-column>
         <el-table-column label="商品圖片" prop="ImagesIdnet" align="center" width="120">
           <template #default="scope">
-            <img src="/img/img_dummy.svg" :alt="scope.Name" />
+            <img :src="getcurrentImgs[scope.row.ImagesIdnet][0]?.Url" :alt="scope.row.Name" />
           </template>
         </el-table-column>
         <el-table-column label="前台顯示" prop="Show" align="center" width="120">
@@ -140,11 +144,12 @@
 
   <!--商品管理-->
   <el-dialog
+    :key="`dialog-${state.editMode}`"
     v-model="dialogGoods"
     width="600px"
     :close-on-click-modal="false"
     :title="detectGoodsDialogMode"
-    @close="resetGoodsForm(goodsFormRef)"
+    @close="resetGoodsForm"
   >
     <hr />
     <el-form ref="goodsFormRef" :model="goodsForm" label-width="80px">
@@ -191,7 +196,38 @@
           <el-input v-model="goodsForm.UnitPrice" type="text" class="col-1-3" placeholder="商品單價" />
         </div>
       </el-form-item>
-      <el-form-item label="圖片上傳:" prop="ImagesIdent"></el-form-item>
+      <el-form-item label="圖片上傳:" prop="ImagesIdnet">
+        <div class="flx horizontal v_center sp_bottom">
+          <label class="upload-customize">
+            <span class="upload-btn">
+              <el-icon><PictureFilled /></el-icon>
+              選擇圖片
+            </span>
+            <input type="file" @change="selectFile($event)" />
+          </label>
+          <span class="upload-file-name sp_left">選擇圖檔: {{ state.imgFileName }}</span>
+        </div>
+        <div class="flx horizontal v_center">
+          <div class="w-150px sp_right">
+            <el-input v-model="goodsForm.ImagesIdnet" type="text" placeholder="圖片別名(Ident)" />
+          </div>
+          <el-button type="primary" class="deep_dark" icon="UploadFilled" @click="handleUpload">上傳圖片</el-button>
+        </div>
+        <div class="goods-img-preview">
+          <div v-for="(item, i) in getcurrentImgs[goodsForm.ImagesIdnet]" :key="i" class="img-preview__items">
+            <div class="img-container">
+              <img :src="item.Url" />
+            </div>
+            <div class="flx horizontal v_center flex_1">
+              <p class="sp_left sp_right">ID: {{ item.ID }}</p>
+              <p>Ident: {{ item.Ident }}</p>
+            </div>
+            <el-icon @click="handleRemoveImg(item)">
+              <Close />
+            </el-icon>
+          </div>
+        </div>
+      </el-form-item>
       <el-form-item label="商品說明:" prop="Description">
         <el-input
           v-model="goodsForm.Description"
@@ -204,40 +240,38 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button plain class="cancel" @click="dialogGoods = false">Cancel</el-button>
-        <el-button v-if="state.editMode !== 'edit'" plain class="cancel" @click="resetGoodsForm(goodsFormRef)">
-          Reset
+        <el-button v-if="state.editMode !== 'edit'" plain class="cancel" @click="resetGoodsForm"> Reset </el-button>
+        <el-button type="primary" class="confirm" @click="handleUpdateGoods(state.editMode !== 'edit' ? true : false)">
+          Confirm
         </el-button>
-        <el-button type="primary" class="confirm" @click="handleUpdateGoods">Confirm</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, computed, onMounted } from 'vue'
+import { defineComponent, reactive, ref, computed, onMounted, Ref } from 'vue'
 import { goodsModules } from '@/store/goods'
 import { callApi } from '@/utils/callApi'
 import {
   getImg,
-  // addGoods,
+  addGoods,
   addGoodsType,
   getGoodsList,
   updateGoods,
-  // updateGoodsType,
+  removeGoodsSpec,
   removeGoods,
   removeGoodsType,
-  updateGoodsType
+  updateGoodsType,
+  removeImg
 } from '@/service/api'
-import SearchField from '@/components/SearchField.vue'
 import type { FormInstance } from 'element-plus'
 
 // type goodsTypeArray = Ref<{ ID: number; Name: string }[]>
 
 export default defineComponent({
   name: 'Goods',
-  components: {
-    SearchField
-  },
+  components: {},
   setup() {
     const goodsStore = goodsModules()
     const goodsFormRef = ref<FormInstance>()
@@ -250,7 +284,11 @@ export default defineComponent({
       },
       tableData: [],
       typeList: [],
-      editMode: 'add'
+      editMode: 'add',
+      imgFile: null,
+      imgFileName: '',
+      imgIdent: '',
+      goodsImg: {}
     })
     const goodsForm: goodsFormType = reactive({
       ID: null,
@@ -260,11 +298,11 @@ export default defineComponent({
       SpecsAllowance: 0,
       GoodsSpecs: [],
       UnitPrice: 0,
-      ImagesIdent: '',
+      ImagesIdnet: '',
       Description: ''
     })
-    const dialogGoods = ref(false)
-    const dialogGoodsType = ref(false)
+    const dialogGoods: Ref<boolean> = ref(false)
+    const dialogGoodsType: Ref<boolean> = ref(false)
     const newTypeName = ref('')
     const newSpecName = ref('')
 
@@ -274,12 +312,14 @@ export default defineComponent({
       goodsStore.getAllGoodsType()
     }
 
+    const parseObj = (target) => JSON.parse(JSON.stringify(target))
+
     const goodsTypeList = computed(
       (): { origin: { ID: number; Name: string }[]; mix: { ID: number; Name: string }[] } => {
-        const arr = JSON.parse(JSON.stringify(goodsStore.typeList))
+        const arr = parseObj(goodsStore.typeList)
         arr.unshift({ ID: 0, Name: '全部', Alias: '' })
         return {
-          origin: JSON.parse(JSON.stringify(goodsStore.typeList)),
+          origin: parseObj(goodsStore.typeList),
           mix: arr
         }
       }
@@ -300,6 +340,10 @@ export default defineComponent({
       callApi(getGoodsList, jwt, (res) => {
         state.tableData = res.data.Data
         oldParams = { ...params }
+        state.tableData.forEach((el) => {
+          state.goodsImg[el.ImagesIdnet] = []
+          getGoodsImg(el.ImagesIdnet)
+        })
       })
     }
 
@@ -322,15 +366,16 @@ export default defineComponent({
       const caseObj = {
         add: () => {
           state.editMode = 'add'
+          resetGoodsForm()
         },
         edit: () => {
           state.editMode = 'edit'
-          const data = { ...obj }
+          const data = parseObj(obj)
           Object.keys(goodsForm).forEach((el) => {
             goodsForm[el] = data[el]
           })
           goodsForm.GoodsSpecs = goodsForm.GoodsSpecs.filter((el) => el.Specs !== '')
-          console.log({ ...obj })
+          console.log(data, goodsForm)
         }
       }
       caseObj[mode]()
@@ -338,8 +383,15 @@ export default defineComponent({
       console.log(dialogGoods.value)
     }
 
-    const handleUpdateGoods = () => {
-      callApi(updateGoods, { ...goodsForm }, () => {
+    const handleUpdateGoods = (isNewGoods = false) => {
+      const jwt = parseObj(goodsForm)
+      if (isNewGoods) delete jwt.ID
+      jwt.SpecsAllowance = jwt.SpecsAllowance * 1
+      jwt.UnitPrice = jwt.UnitPrice * 1
+      console.log(jwt)
+      callApi(isNewGoods ? addGoods : updateGoods, jwt, async () => {
+        await handleSearch(false, false)
+        dialogGoods.value = false
         ElMessage({
           type: 'success',
           message: '已成功更新商品內容!'
@@ -347,7 +399,7 @@ export default defineComponent({
       })
     }
 
-    const detectGoodsDialogMode = computed(() => {
+    const detectGoodsDialogMode = computed((): string => {
       let result = ''
       const caseObj = {
         add: () => {
@@ -360,14 +412,6 @@ export default defineComponent({
       caseObj[state.editMode]()
       return result
     })
-
-    const getGoodsImg = (isList = true, ident?: string) => {
-      let imgPath = ''
-      callApi(getImg, { Ident: ident }, (res) => {
-        console.log(res.data.Data)
-      })
-      return imgPath
-    }
 
     const handleRemoveGoods = (obj) => {
       const title = '提示訊息'
@@ -412,7 +456,7 @@ export default defineComponent({
 
     const handleUpdateGoodsType = () => {
       const arr = goodsTypeList.value.origin.filter((el) => el.ID > 1)
-      const jwt = JSON.parse(JSON.stringify(arr))
+      const jwt = parseObj(arr)
       console.log(jwt)
       callApi(updateGoodsType, { List: jwt }, async (res) => {
         await getGoodsTypeList()
@@ -460,10 +504,15 @@ export default defineComponent({
       console.log(i, goodsForm.GoodsSpecs)
     }
 
-    const removeGoodsSpecs = (val, i: number) => {
+    const removeGoodsSpecs = async (val, i: number) => {
       const idx = goodsForm.GoodsSpecs.indexOf(val)
       if (idx === i) goodsForm.GoodsSpecs.splice(idx, 1)
-      console.log(goodsForm.GoodsSpecs, i, idx)
+      await callApi(removeGoodsSpec, { ID: val.ID }, () => {
+        ElMessage({
+          message: `已移除 ${val.Specs} ID: ${val.ID}`,
+          type: 'success'
+        })
+      })
     }
 
     /* Reset Form */
@@ -472,9 +521,113 @@ export default defineComponent({
       formEl.resetFields()
     }
 
-    const resetGoodsForm = (formEl: FormInstance | undefined) => {
-      resetForm(formEl)
+    const resetGoodsForm = () => {
+      goodsForm.ID = null
+      goodsForm.Show = true
+      goodsForm.GoodsTypeID = 1
+      goodsForm.Name = ''
+      goodsForm.SpecsAllowance = 0
       goodsForm.GoodsSpecs = []
+      goodsForm.UnitPrice = 0
+      goodsForm.ImagesIdnet = ''
+      goodsForm.Description = ''
+    }
+
+    /* Image Upload Events */
+
+    const selectFile = async (event) => {
+      const file = event.target.files[0]
+      const fileSize = file.size / 1024
+      state.imgFile = file
+      state.imgFileName = file.name
+      console.log('###upload info: ', (file.size / 1024).toFixed(2), 'kb', state.imgFile)
+      if (fileSize > 250) {
+        ElMessage({
+          message: '檔案不可大於 250KB',
+          type: 'error'
+        })
+        state.imgFileName = '檔案不可大於 250KB，請重新選擇圖片'
+        return
+      }
+    }
+
+    const handleUpload = () => {
+      const token: string = parseObj(localStorage.getItem('userInfo') as string).token
+      const formData: FormData = new FormData()
+      formData.append('Ident', goodsForm.ImagesIdnet)
+      formData.append('Img', state.imgFile!)
+      const options: RequestInit = {
+        method: 'POST',
+        headers: {
+          token: token
+        },
+        body: formData
+      }
+      if (state.imgFile === null) {
+        ElMessage({
+          type: 'error',
+          message: '未選擇檔案'
+        })
+        return
+      }
+      if (!state.goodsImg.hasOwnProperty(goodsForm.ImagesIdnet)) {
+        state.goodsImg[goodsForm.ImagesIdnet] = []
+      }
+      const baseUrl = import.meta.env.MODE === 'production' ? import.meta.env.VITE_BASE_API : '/api'
+      fetch(baseUrl + '/admin/image/c', options)
+        .then((res) => res.json())
+        .then((res) => {
+          state.goodsImg[goodsForm.ImagesIdnet].push(res.Data)
+          console.log(res, state.goodsImg)
+          ElMessage({
+            type: 'success',
+            message: '已成功上傳圖片'
+          })
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'error',
+            message: 'API錯誤'
+          })
+        })
+    }
+
+    const getGoodsImg = async (ident: string) => {
+      callApi(getImg, { Ident: ident }, (res) => {
+        state.goodsImg[ident] = res.data.Data
+      })
+    }
+
+    const getcurrentImgs = computed(() => {
+      const obj = { ...state.goodsImg }
+      return obj
+    })
+
+    const handleRemoveImg = (obj) => {
+      const title = '提示訊息'
+      const msg = `確定要刪除【${obj.Ident}】這張圖片嗎？(ID: ${obj.ID})?`
+      ElMessageBox.confirm(msg, title, {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        type: 'warning'
+      })
+        .then(() => {
+          const jwt = { id: obj.ID }
+          callApi(removeImg, jwt, async () => {
+            await removeImg(jwt)
+            await getGoodsImg(obj.Ident)
+            ElMessage({
+              type: 'success',
+              message: '已成功刪除圖片!'
+            })
+          })
+        })
+        .catch(() => {
+          ElMessage({
+            type: 'info',
+            message: '已取消'
+          })
+        })
     }
 
     /* initial Settings */
@@ -490,6 +643,7 @@ export default defineComponent({
       goodsFormRef,
       newTypeName,
       newSpecName,
+      parseObj,
       dialogGoods,
       dialogGoodsType,
       onPageChange,
@@ -511,6 +665,10 @@ export default defineComponent({
       spacTagChange,
       resetForm,
       resetGoodsForm,
+      selectFile,
+      getcurrentImgs,
+      handleUpload,
+      handleRemoveImg,
       init
     }
   }

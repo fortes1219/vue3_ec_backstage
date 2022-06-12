@@ -63,7 +63,7 @@ export default({mode}: ConfigEnv) => defineConfig({
     viteCompression()
   ],
   server: {
-    port: 3000,
+    // port: 3000,
     proxy: {
       '/api': {
         target: env(mode, 'VITE_BASE_API'),

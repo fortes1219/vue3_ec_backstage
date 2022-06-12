@@ -1,6 +1,9 @@
 import axios from 'axios'
 
 export function request(config) {
+  config.headers.token = !localStorage.getItem('userInfo')
+    ? ''
+    : JSON.parse(localStorage.getItem('userInfo') as string).token
   const service = axios.create({
     headers: config.headers,
     baseURL: import.meta.env.MODE === 'production' ? 'https://nocodenolife.net/fortes/' : '/api',
@@ -49,7 +52,6 @@ export function request(config) {
   // response攔截
   service.interceptors.response.use(
     (response) => {
-      console.log('res', response)
       return response
     },
     (error) => {
@@ -59,3 +61,5 @@ export function request(config) {
   )
   return service(config)
 }
+
+console.log(import.meta.env.MODE)

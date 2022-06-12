@@ -30,6 +30,8 @@ import { reactive, onMounted } from 'vue'
 import { getOtp, userLogin } from '@/service/api'
 import { ElMessage } from 'element-plus'
 import { userModules } from '@/store/user'
+import { callApi } from '@/utils/callApi'
+import { getAdminPermissions } from '@/service/api'
 
 type LoginForm = {
   title: string
@@ -71,23 +73,36 @@ export default defineComponent({
       }
     }
 
+    /* 取得當前管理員的權限列表後，更新userStore的權限列表 */
+    const getPermissions = async () => {
+      const uid = userStore.$state.userStatus.id
+      const jwt = { MemberID: uid }
+      await callApi(getAdminPermissions, jwt, (res) => {
+        userStore.setUserPermissions(res.data.Data.Permission)
+      })
+    }
+
+    const handleRouterChange = async () => {
+      await getPermissions()
+      await router.push({ name: 'Home' })
+    }
+
     const handleLogin = async () => {
       const jwt: LoginForm['form'] = {
         username: state.form.username,
         password: state.form.password,
         otp: state.form.otp
       }
-      const res = await userLogin(jwt)
-      if (res.data.Code === 200) {
+      await callApi(userLogin, jwt, async (res) => {
         state.token = res.data.Data.Token
         await userStore.setUserStatus({
+          id: res.data.Data.Info.ID,
           account: res.data.Data.Info.Account,
           username: res.data.Data.Info.Name,
           token: res.data.Data.Token
         })
-        await router.push({ name: 'Home' })
-        console.log(userStore.userStatus)
-      }
+      })
+      await handleRouterChange()
     }
 
     const init = onMounted(async () => {

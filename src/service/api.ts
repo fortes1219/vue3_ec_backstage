@@ -1,7 +1,5 @@
 import { request } from '@/service/request'
 
-const token = !localStorage.getItem('userInfo') ? '' : JSON.parse(localStorage.getItem('userInfo') as string).token
-
 /* 取得登入OTP碼 */
 export const getOtp = (params) =>
   request({
@@ -25,7 +23,7 @@ export const getOverview = (params) =>
   request({
     url: '/admin/dashboard',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain', token: token },
+    headers: { 'Content-Type': 'text/plain' },
     params
   })
 
@@ -35,8 +33,7 @@ export const getImg = (params) =>
     url: '/admin/image/r',
     method: 'post',
     headers: {
-      'Content-Type': 'application/json',
-      token: token
+      'Content-Type': 'application/json'
     },
     params
   })
@@ -47,8 +44,7 @@ export const removeImg = (params) =>
     url: '/admin/image/d',
     method: 'post',
     headers: {
-      'Content-Type': 'application/json',
-      token: token
+      'Content-Type': 'application/json'
     },
     params
   })
@@ -58,7 +54,7 @@ export const getGoodsList = (params) =>
   request({
     url: '/admin/goods/r',
     method: 'post',
-    headers: { 'Content-Type': 'application/json', token: token },
+    headers: { 'Content-Type': 'application/json' },
     params
   })
 
@@ -67,7 +63,7 @@ export const addGoods = (params) =>
   request({
     url: '/admin/goods/c',
     method: 'post',
-    headers: { 'Content-Type': 'application/json', token: token },
+    headers: { 'Content-Type': 'application/json' },
     params
   })
 
@@ -76,7 +72,7 @@ export const updateGoods = (params) =>
   request({
     url: '/admin/goods/u',
     method: 'post',
-    headers: { 'Content-Type': 'application/json', token: token },
+    headers: { 'Content-Type': 'application/json' },
     params
   })
 
@@ -85,7 +81,16 @@ export const removeGoods = (params) =>
   request({
     url: '/admin/goods/d',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain', token: token },
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+/* remove goods specs */
+export const removeGoodsSpec = (params) =>
+  request({
+    url: '/admin/goods/specs/d',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
     params
   })
 
@@ -94,7 +99,7 @@ export const getGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/r',
     method: 'get',
-    headers: { 'Content-Type': 'text/plain', token: token },
+    headers: { 'Content-Type': 'text/plain' },
     params
   })
 
@@ -103,7 +108,7 @@ export const addGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/c',
     method: 'post',
-    headers: { 'Content-Type': 'text/plain', token: token },
+    headers: { 'Content-Type': 'text/plain' },
     params
   })
 
@@ -112,7 +117,7 @@ export const updateGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/u',
     method: 'post',
-    headers: { 'Content-Type': 'application/json', token: token },
+    headers: { 'Content-Type': 'application/json' },
     params
   })
 
@@ -121,6 +126,59 @@ export const removeGoodsType = (params) =>
   request({
     url: '/admin/goods/goodstype/d',
     method: 'post',
-    headers: { 'Content-Type': 'application/json', token: token },
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
+/* Admin List */
+
+/* get Admin List */
+export const getAdminMembers = (params) =>
+  request({
+    url: '/admin/member/backstage/r',
+    method: 'get',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+export const addAdminMembers = (params) =>
+  request({
+    url: '/admin/member/backstage/c',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+export const updateAdminMembers = (params) =>
+  request({
+    url: '/admin/member/backstage/u',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+export const removeAdminMembers = (params) =>
+  request({
+    url: '/admin/member/backstage/d',
+    method: 'post',
+    headers: { 'Content-Type': 'text/plain' },
+    params
+  })
+
+/* Permissions */
+
+export const getAdminPermissions = (params) =>
+  request({
+    url: '/admin/permission/r',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    params
+  })
+
+export const updateAdminPermissions = (params) =>
+  request({
+    url: '/admin/permission/u',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
     params
   })
