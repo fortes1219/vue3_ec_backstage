@@ -5,7 +5,7 @@
         <h1>Admin Backoffice</h1>
         <br />
         <div class="input__inner" data-space-bottom="1rem">
-          <input v-model="state.form.username" type="text" placeholder="Username" />
+          <input v-model="state.form.account" type="text" placeholder="Username" />
         </div>
         <div class="input__inner" data-space-bottom="1rem">
           <input v-model="state.form.password" type="password" placeholder="Password" />
@@ -36,7 +36,7 @@ import { getAdminPermissions } from '@/service/api'
 type LoginForm = {
   title: string
   form: {
-    username: string
+    account: string
     password: string
     otp: number | string
   }
@@ -53,7 +53,7 @@ export default defineComponent({
     const state: LoginForm = reactive({
       title: 'Admin Login',
       form: {
-        username: '',
+        account: '',
         password: '',
         otp: ''
       },
@@ -88,10 +88,10 @@ export default defineComponent({
     }
 
     const handleLogin = async () => {
-      const jwt: LoginForm['form'] = {
-        username: state.form.username,
-        password: state.form.password,
-        otp: state.form.otp
+      const jwt = {
+        Account: state.form.account,
+        Password: state.form.password,
+        OTP: state.form.otp
       }
       await callApi(userLogin, jwt, async (res) => {
         state.token = res.data.Data.Token
