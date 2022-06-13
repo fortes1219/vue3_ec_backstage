@@ -87,8 +87,7 @@ export default({mode}: ConfigEnv) => defineConfig({
         chunkFileNames: "js/[name].[hash].js",
         entryFileNames: "js/[name].[hash].js",
         assetFileNames: (info) => {
-          let type = info.name.split(".")[1];
-          return `${type}/[name]-[hash].[ext]`;
+          return `[name]-[hash].[ext]`;
         },
       }
     },
