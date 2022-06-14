@@ -8,7 +8,7 @@
             <el-icon>
               <component :is="setIcons(item.name)"></component>
             </el-icon>
-            {{ item.meta?.name }}
+            {{ item.meta.name }}
           </div>
         </li>
       </ul>
@@ -21,7 +21,7 @@ import { defineComponent, reactive, onMounted, computed } from 'vue'
 import { useRouter, RouteRecordRaw } from 'vue-router'
 
 type asideState = {
-  routes: RouteRecordRaw[] | undefined
+  routes: any
 }
 
 export default defineComponent({
