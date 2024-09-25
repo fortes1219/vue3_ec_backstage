@@ -12,7 +12,6 @@ import {
   ElMenu,
   ElMenuItem,
   ElMenuItemGroup,
-  ElMessage,
   ElProgress,
   ElPagination,
   ElRadio,
@@ -47,7 +46,6 @@ export const elComponents = [
   ElMenu,
   ElMenuItem,
   ElMenuItemGroup,
-  ElMessage,
   ElProgress,
   ElPagination,
   ElRadio,
@@ -67,5 +65,3 @@ export const elComponents = [
   ElTooltip,
   ElUpload
 ]
-
-export const elPlugins = [ElMessage, ElMessageBox]

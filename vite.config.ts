@@ -1,6 +1,5 @@
 import { ConfigEnv, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import eslintPlugin from 'vite-plugin-eslint'
@@ -44,12 +43,6 @@ export default({mode}: ConfigEnv) => defineConfig({
       filename: "stats.html",
       title: "Rollup Visualizer",
       template: "treemap"
-    }),
-    AutoImport({
-      resolvers: [
-        ElementPlusResolver()
-      ],
-      dts: path.resolve(path.resolve(__dirname, 'src'), 'auto-imports.d.ts'),
     }),
     Components({
       resolvers: [

@@ -250,7 +250,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, computed, onMounted, Ref } from 'vue'
+import { defineComponent, reactive, ref, inject, computed, onMounted, Ref } from 'vue'
 import { goodsModules } from '@/store/goods'
 import { callApi } from '@/utils/callApi'
 import {
@@ -275,6 +275,7 @@ export default defineComponent({
   setup() {
     const goodsStore = goodsModules()
     const goodsFormRef = ref<FormInstance>()
+    const proxy = inject('vueProxy')
     const state: goodsStateType = reactive({
       searchParams: {
         goodsTypeSelected: 0,
@@ -392,7 +393,7 @@ export default defineComponent({
       callApi(isNewGoods ? addGoods : updateGoods, jwt, async () => {
         await handleSearch(false, false)
         dialogGoods.value = false
-        ElMessage({
+        proxy.$message({
           type: 'success',
           message: '已成功更新商品內容!'
         })
@@ -425,7 +426,7 @@ export default defineComponent({
         .then(() => {
           callApi(removeGoods, { ID: data.ID }, async () => {
             await handleSearch(false, false)
-            ElMessage({
+            proxy.$message({
               type: 'success',
               message: '已成功刪除商品!'
             })
@@ -433,7 +434,7 @@ export default defineComponent({
           console.log('###remove goods: ', data.ID)
         })
         .catch(() => {
-          ElMessage({
+          proxy.$message({
             type: 'info',
             message: '已取消'
           })
@@ -460,7 +461,7 @@ export default defineComponent({
       console.log(jwt)
       callApi(updateGoodsType, { List: jwt }, async (res) => {
         await getGoodsTypeList()
-        ElMessage({
+        proxy.$message({
           type: 'success',
           message: '已成功更新商品分類!'
         })
@@ -481,14 +482,14 @@ export default defineComponent({
           callApi(removeGoodsType, { ID: obj.ID }, async (res) => {
             console.log('###remove goods type: ', res.data)
             await getGoodsTypeList()
-            ElMessage({
+            proxy.$message({
               type: 'success',
               message: '已成功刪除商品分類!'
             })
           })
         })
         .catch(() => {
-          ElMessage({
+          proxy.$message({
             type: 'info',
             message: '已取消'
           })
@@ -508,7 +509,7 @@ export default defineComponent({
       const idx = goodsForm.GoodsSpecs.indexOf(val)
       if (idx === i) goodsForm.GoodsSpecs.splice(idx, 1)
       await callApi(removeGoodsSpec, { ID: val.ID }, () => {
-        ElMessage({
+        proxy.$message({
           message: `已移除 ${val.Specs} ID: ${val.ID}`,
           type: 'success'
         })
@@ -542,7 +543,7 @@ export default defineComponent({
       state.imgFileName = file.name
       console.log('###upload info: ', (file.size / 1024).toFixed(2), 'kb', state.imgFile)
       if (fileSize > 250) {
-        ElMessage({
+        proxy.$message({
           message: '檔案不可大於 250KB',
           type: 'error'
         })
@@ -564,7 +565,7 @@ export default defineComponent({
         body: formData
       }
       if (state.imgFile === null) {
-        ElMessage({
+        proxy.$message({
           type: 'error',
           message: '未選擇檔案'
         })
@@ -579,13 +580,13 @@ export default defineComponent({
         .then((res) => {
           state.goodsImg[goodsForm.ImagesIdnet].push(res.Data)
           console.log(res, state.goodsImg)
-          ElMessage({
+          proxy.$message({
             type: 'success',
             message: '已成功上傳圖片'
           })
         })
         .catch(() => {
-          ElMessage({
+          proxy.$message({
             type: 'error',
             message: 'API錯誤'
           })
@@ -616,14 +617,14 @@ export default defineComponent({
           callApi(removeImg, jwt, async () => {
             await removeImg(jwt)
             await getGoodsImg(obj.Ident)
-            ElMessage({
+            proxy.$message({
               type: 'success',
               message: '已成功刪除圖片!'
             })
           })
         })
         .catch(() => {
-          ElMessage({
+          proxy.$message({
             type: 'info',
             message: '已取消'
           })
